@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" th:href="@{../css/styles.css}">
+    <style>
+        .container {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .error-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="message" th:if="${message != null}">
+        <span class="error-icon">
+            <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon">
+        </span>
+        [[${message}]]
+    </div>
+    <h2>Registration Form</h2>
+    <form
+            th:action="@{/registration}"
+            method="post"
+            role="form"
+            th:object="${user}"
+    >
+        <div class="form-group">
+            <label for="fullname">Fullname:</label>
+            <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <input type="submit" value="Register">
+    </form>
+</div>
+</body>
+</html>

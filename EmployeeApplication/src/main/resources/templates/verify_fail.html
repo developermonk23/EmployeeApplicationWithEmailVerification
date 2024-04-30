@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Verification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .error-box {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            font-size: 20px;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-back:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="error-box">
+        <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon" class="error-icon">
+        <div class="error-title">Oops! Verification Failed</div>
+        <div class="error-message">
+            Sorry, we couldn't verify your account. It may already be verified, or the verification code is incorrect.
+        </div>
+        <a th:href="@{/registration}" class="btn btn-back">Register</a>
+    </div>
+</div>
+</body>
+</html>
