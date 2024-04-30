@@ -48,6 +48,7 @@
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
+            margin-bottom: 10px; /* Added margin-bottom to create space */
         }
 
         input[type="submit"]:hover {
@@ -85,6 +86,9 @@
         </div>
         <input type="submit" value="Login">
     </form>
+    
+    <!-- Create Account button -->
+    <a class="btn btn-primary" th:href="@{/registration}" style="margin-top: 10px;">Create Account</a>
 </div>
 </body>
 </html>
