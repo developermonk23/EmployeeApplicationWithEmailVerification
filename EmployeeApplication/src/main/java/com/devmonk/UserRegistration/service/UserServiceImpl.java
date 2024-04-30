@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
 	public void save(User user, String siteURL) throws Exception{
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
-		user.setRole("USER");
 		String randomCode = UUID.randomUUID().toString();
 		user.setVerificationCode(randomCode);
 		user.setEnabled(false);
@@ -81,13 +80,12 @@ public class UserServiceImpl implements UserService {
 		} else {
 			user.setVerificationCode(null);
 			user.setEnabled(true);
+			user.setRole("USER");
 			userRepository.save(user);
 			
 			return true;
 		}
 		
 	}
-
-
 
 }
