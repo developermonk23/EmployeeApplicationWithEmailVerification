@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 			throws Exception {
 		String toAddress = user.getEmail();
 		String fromAddress = "emailaddress";
-		String senderName = "User Verificcation Team";
+		String senderName = "User Verification Team";
 		String subject = "Please verify your registration";
 		String content = "Dear [[name]],<br>"
 				+ "Please click the link below to verify your registration:<br>"
