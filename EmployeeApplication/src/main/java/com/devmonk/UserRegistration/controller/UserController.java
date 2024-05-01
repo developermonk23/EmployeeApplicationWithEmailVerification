@@ -22,6 +22,7 @@ import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class UserController {
@@ -41,12 +42,14 @@ public class UserController {
         this.employeeService = employeeService;
         this.userDetailsService = userDetailsService;
     }
-
+	
+	//to populate the registration page
     @GetMapping("/registration")
     public String getRegistrationPage(@ModelAttribute("user") User user) {
         return "register";
     }
 
+    //to save the user details on registration
     @PostMapping("/registration")
     public String saveUser(@ModelAttribute("user") User user, Model model, HttpServletRequest request) throws Exception{
     	String siteURL = request.getRequestURL().toString();
@@ -56,11 +59,13 @@ public class UserController {
         return "register_sucess";
     }
 
+    //to populate login page
     @GetMapping("/login")
     public String login() {
         return "login";
     }
-
+    
+    //populate user page
     @GetMapping("user-page")
     public String userPage(Model model, Principal principal) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
@@ -71,11 +76,13 @@ public class UserController {
         return "user";
     }
 
+    //populate admin page
     @GetMapping("admin-page")
     public String viewHomePage(Model model) {
         return findPaginated(1, "firstName", "asc", model);
     }
-
+    
+    //populate add employee 
     @GetMapping("/showNewEmployeeForm")
     public String showNewEmployeeForm(Model model) {
         Employee employee = new Employee();
@@ -83,12 +90,14 @@ public class UserController {
         return "new_employee";
     }
 
+    //to save new employee details
     @PostMapping("/saveEmployee")
     public String saveEmployee(@ModelAttribute("employee") Employee employee) {
         employeeService.saveEmployee(employee);
         return "redirect:admin-page";
     }
 
+    //to edit employee details
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
         Employee employee = employeeService.getEmployeeById(id);
@@ -96,12 +105,14 @@ public class UserController {
         return "update_employee";
     }
 
+    //to delete user
     @GetMapping("/deleteEmployee/{id}")
     public String deleteEmployee(@PathVariable(value = "id") long id) {
         employeeService.deleteEmployeeById(id);
         return "redirect:/admin-page";
     }
-
+    
+    //pagination
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo,
                                 @RequestParam("sortField") String sortField,
@@ -120,6 +131,7 @@ public class UserController {
         return "admin";
     }
     
+    //method to verify if email verification is done by the registered user
     @GetMapping("/registration/verify")
 	public String verifyUser(@Param("code") String code) {
 		if (userService.verify(code)) {
@@ -129,12 +141,27 @@ public class UserController {
 		}
 	}
     
+    //search functionality
     @GetMapping("/search")
     public String searchEmployees(@RequestParam("keyword") String keyword, Model model) {
         List<Employee> searchResults = employeeService.searchEmployees(keyword);
         model.addAttribute("listEmployees", searchResults);
-        return "admin"; // Return the same view
+        return "admin";
     }
+    
+    //export file functionality
+    @GetMapping("/excel")
+	public void generateExcelReport(HttpServletResponse response) throws Exception{
+		
+		response.setContentType("application/octet-stream");
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment;filename=employee_details.xls";
 
-
+		response.setHeader(headerKey, headerValue);
+		
+		employeeService.generateExcel(response);
+		
+		response.flushBuffer();
+	}
 }
