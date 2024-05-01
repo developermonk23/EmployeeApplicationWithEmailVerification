@@ -133,7 +133,7 @@ public class UserController {
     public String searchEmployees(@RequestParam("keyword") String keyword, Model model) {
         List<Employee> searchResults = employeeService.searchEmployees(keyword);
         model.addAttribute("listEmployees", searchResults);
-        return "admin"; // Return the same view
+        return "admin";
     }
 
 
