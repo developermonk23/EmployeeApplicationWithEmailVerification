@@ -62,7 +62,13 @@
 
     <!-- Add employee button -->
     <a th:href="@{/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Add Employee </a>
-
+	
+	<form th:action="@{/search}" method="get" class="form-inline mb-3">
+    	<input type="text" name="keyword" class="form-control mr-2" placeholder="Search">
+    	<button type="submit" class="btn btn-primary">Search</button>
+	</form>
+	
+	
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
