@@ -128,5 +128,13 @@ public class UserController {
 			return "verify_fail";
 		}
 	}
+    
+    @GetMapping("/search")
+    public String searchEmployees(@RequestParam("keyword") String keyword, Model model) {
+        List<Employee> searchResults = employeeService.searchEmployees(keyword);
+        model.addAttribute("listEmployees", searchResults);
+        return "admin";
+    }
+
 
 }
