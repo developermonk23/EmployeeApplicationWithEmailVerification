@@ -3,6 +3,7 @@ package com.devmonk.UserRegistration.service;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -86,6 +87,34 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 		
+	}
+	
+	@Override
+	 public void sendPasswordResetEmail(String email, String resetUrl) {
+	        SimpleMailMessage message = new SimpleMailMessage();
+	        message.setTo(email);
+	        message.setSubject("Password Reset");
+	        message.setText("To reset your password, click here: " + resetUrl);
+	        mailSender.send(message);
+	    }
+	
+	@Override
+	public void saveUser(User user) throws Exception{
+
+		userRepository.save(user);
+		
+	}
+
+	@Override
+	public User findByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		return user;
+	}
+
+	@Override
+	public User findByResetToken(String token) {
+		User user = userRepository.findByResetToken(token);
+		return user;
 	}
  
 }

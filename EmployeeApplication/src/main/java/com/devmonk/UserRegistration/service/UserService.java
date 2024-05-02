@@ -1,12 +1,6 @@
 package com.devmonk.UserRegistration.service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import com.devmonk.UserRegistration.dto.UserDto;
 import com.devmonk.UserRegistration.model.User;
-
-import jakarta.mail.MessagingException;
 
 public interface UserService {
 	
@@ -15,5 +9,13 @@ public interface UserService {
 	 void sendVerificationEmail(User user, String siteURL) throws Exception;
 	 
 	 boolean verify (String code);
+
+	void sendPasswordResetEmail(String email, String resetUrl);
+
+	void saveUser(User user) throws Exception;
+
+	User findByEmail(String email);
+
+	User findByResetToken(String token);
 
 }

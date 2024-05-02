@@ -2,10 +2,13 @@ package com.devmonk.UserRegistration.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
@@ -164,4 +167,63 @@ public class UserController {
 		
 		response.flushBuffer();
 	}
+    
+    @GetMapping("/password-recovery")
+    public String showPasswordRecoveryPage() {
+        return "password_recovery";
+    }
+    
+    //forgot password functionality
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam("email") String email, Model model) throws Exception {
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            model.addAttribute("errorMessage", "User not found");
+        } else {
+            String token = generateToken();
+            user.setResetToken(token);
+            user.setResetTokenExpiry(24); // token expire in hours
+            userService.saveUser(user);
+
+            String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+            userService.sendPasswordResetEmail(user.getEmail(), resetUrl);
+
+            model.addAttribute("successMessage", "Password reset instructions sent to your email");
+        }
+        return "password_recovery"; 
+    }
+
+    
+    private String generateToken() {
+    	
+    	return UUID.randomUUID().toString();
+    }
+    
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage(@RequestParam("token") String token, Model model) {
+        model.addAttribute("token", token);
+        return "reset_password";
+    }
+    
+    //reset password functionality
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestParam("token") String token,
+                                                @RequestParam("password") String password) throws Exception {
+        User user = userService.findByResetToken(token);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid or expired token");
+        }
+
+        if (user.getResetTokenExpiry() <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired");
+        }
+
+        user.setPassword(password);
+        user.setResetToken(null);
+        user.setResetTokenExpiry(0);
+        userService.saveUser(user);
+
+        return ResponseEntity.ok("Password reset successfully");
+    }
+
 }
