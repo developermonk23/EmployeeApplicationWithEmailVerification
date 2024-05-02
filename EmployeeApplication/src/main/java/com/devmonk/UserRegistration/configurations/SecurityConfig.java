@@ -38,7 +38,8 @@ public class SecurityConfig {
 		
 		.authorizeHttpRequests(request -> request.requestMatchers("/showNewEmployeeForm")
 				.hasAuthority("ADMIN").requestMatchers("/user-page").hasAuthority("USER")
-				.requestMatchers("/registration", "/css/**", "/registration/verify").permitAll()
+				.requestMatchers("/registration", "/css/**", "/registration/verify", 
+						"/password-recovery", "/forgot-password", "/reset-password").permitAll()
 				.anyRequest().authenticated())
 		
 		.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")

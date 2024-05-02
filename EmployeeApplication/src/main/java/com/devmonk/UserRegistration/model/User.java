@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
@@ -22,6 +23,10 @@ public class User {
 	
 	private boolean enabled;
 	private String verificationCode;
+	
+    private String resetToken;
+
+    private int resetTokenExpiry;
 	
 	public User() {
 		super();
@@ -89,6 +94,22 @@ public class User {
 
 	public void setVerificationCode(String verificationCode) {
 		this.verificationCode = verificationCode;
+	}
+
+	public String getResetToken() {
+		return resetToken;
+	}
+
+	public void setResetToken(String resetToken) {
+		this.resetToken = resetToken;
+	}
+
+	public int getResetTokenExpiry() {
+		return resetTokenExpiry;
+	}
+
+	public void setResetTokenExpiry(int resetTokenExpiry) {
+		this.resetTokenExpiry = resetTokenExpiry;
 	}
 	
 }
