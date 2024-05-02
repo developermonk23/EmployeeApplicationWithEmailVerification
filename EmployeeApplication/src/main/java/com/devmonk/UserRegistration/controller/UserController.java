@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,9 @@ public class UserController {
 	
 	@Autowired
 	private  EmployeeService employeeService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService) {
@@ -217,8 +221,8 @@ public class UserController {
         if (user.getResetTokenExpiry() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired");
         }
-
-        user.setPassword(password);
+        String encodedPassword = passwordEncoder.encode(password);
+		user.setPassword(encodedPassword);
         user.setResetToken(null);
         user.setResetTokenExpiry(0);
         userService.saveUser(user);
