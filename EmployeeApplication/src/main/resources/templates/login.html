@@ -59,6 +59,14 @@
             color: #dc3545;
             margin-bottom: 20px;
         }
+
+        .forgot-password-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +94,9 @@
         </div>
         <input type="submit" value="Login">
     </form>
+    
+    <!-- Forgot Password link -->
+    <a class="forgot-password-link" th:href="@{/password-recovery}" style="margin-bottom: 10px;" >Forgot Password?</a>
     
     <!-- Create Account button -->
     <a class="btn btn-primary" th:href="@{/registration}" style="margin-top: 10px;">Create Account</a>
