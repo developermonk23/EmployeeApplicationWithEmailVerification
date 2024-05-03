@@ -31,6 +31,12 @@ public class Employee {
 	@Column(name = "photo")
 	private String photo;
 	
+	@Column(name = "review")
+	private String review;
+	
+	@Column(name = "rating")
+	private String rating;
+	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private User user;
@@ -88,6 +94,18 @@ public class Employee {
 	}
 	public void setCountry(String country) {
 		this.country = country;
+	}
+	public String getReview() {
+		return review;
+	}
+	public void setReview(String review) {
+		this.review = review;
+	}
+	public String getRating() {
+		return rating;
+	}
+	public void setRating(String rating) {
+		this.rating = rating;
 	}
 	
 	
