@@ -9,7 +9,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.User;
+import com.devmonk.UserRegistration.repository.EmployeeRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 
 import jakarta.mail.internet.MimeMessage;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
 	@Override
 	public void save(User user, String siteURL) throws Exception{
@@ -35,7 +40,16 @@ public class UserServiceImpl implements UserService {
 		user.setEnabled(false);
 
 		userRepository.save(user);
-		
+		//every registered user is an employee
+		Employee employee = new Employee();
+		String[] nameParts = user.getFullname().split(" ");
+        String firstName = nameParts[0];
+        String lastName = (nameParts.length > 1) ? nameParts[1] : "";
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
+        employee.setEmail(user.getEmail());
+        // Set other Employee attributes as needed
+        employeeRepository.save(employee);
 		sendVerificationEmail(user, siteURL);
 	}
 	
