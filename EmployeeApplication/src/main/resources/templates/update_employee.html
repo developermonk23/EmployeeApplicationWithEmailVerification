@@ -13,6 +13,7 @@
         }
         h1 {
             color: #007bff;
+            margin-bottom: 30px;
         }
         form {
             margin-top: 30px;
@@ -20,10 +21,21 @@
         input[type="file"] {
             margin-bottom: 20px;
         }
-        #preview {
-            margin-top: 20px;
-            max-width: 200px; /* Adjust as needed */
-            max-height: 200px; /* Adjust as needed */
+        .review-section {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -36,64 +48,66 @@
         <form action="#" th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
             <input type="hidden" th:field="*{id}" />
 
-            <div class="form-group">
-                <label for="firstName">First Name:</label>
-                <input type="text" th:field="*{firstName}" class="form-control col-md-4" placeholder="First Name">
-            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- Employee Details -->
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" th:field="*{firstName}" class="form-control" placeholder="First Name">
+                    </div>
 
-            <div class="form-group">
-                <label for="lastName">Last Name:</label>
-                <input type="text" th:field="*{lastName}" class="form-control col-md-4" placeholder="Last Name">
-            </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" th:field="*{lastName}" class="form-control" placeholder="Last Name">
+                    </div>
 
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="text" th:field="*{email}" class="form-control col-md-4" placeholder="Email">
-            </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="text" th:field="*{email}" class="form-control" placeholder="Email">
+                    </div>
 
-            <div class="form-group">
-                <label for="country">Country:</label>
-                <select id="country" name="country" class="form-control col-md-4">
-                    <!-- Include options for all countries -->
-                    <option value="USA">USA</option>
-                    <option value="Canada">Canada</option>
-                    <!-- Add more options for other countries -->
-                </select>
-            </div>
+                    <div class="form-group">
+                        <label for="country">Country:</label>
+                        <select id="country" name="country" class="form-control">
+                            <option value="USA">USA</option>
+                            <option value="Canada">Canada</option>
+                        </select>
+                    </div>
 
-            <div class="form-group">
-                <label for="address">Address:</label>
-                <input type="text" th:field="*{address}" class="form-control col-md-4" placeholder="Address">
-            </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" th:field="*{address}" class="form-control" placeholder="Address">
+                    </div>
 
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="text" th:field="*{phoneNumber}" class="form-control col-md-4" placeholder="Phone Number">
-            </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Phone Number:</label>
+                        <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Phone Number">
+                    </div>
+                    <button type="submit" class="btn btn-info btn-submit">Update Employee</button>
+                </div>
 
-            <button type="submit" class="btn btn-info">Update Employee</button>
+                <div class="col-md-6">
+                    <!-- Review and Rating -->
+                    <div class="review-section">
+                        <h2 class="text-center">Review and Rating</h2>
+
+                        <div class="form-group">
+                            <label for="rating">Rating:</label>
+                            <input type="number" th:field="${employee.rating}" min="1" max="5" step="1" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="review">Review:</label>
+                            <textarea th:field="${employee.review}" rows="4" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
 
         <hr>
 
-        <a th:href="@{/admin-page}">Back to Employee List</a>
+        <a th:href="@{/admin-page}" class="btn btn-secondary">Back to Employee List</a>
     </div>
-
-    <script>
-        // Preview uploaded image before submission
-        function previewImage(event) {
-            var reader = new FileReader();
-            reader.onload = function() {
-                var preview = document.getElementById('preview');
-                preview.src = reader.result;
-                preview.style.display = 'block';
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        // Attach event listener to file input
-        var photoInput = document.getElementById('photo');
-        photoInput.addEventListener('change', previewImage);
-    </script>
 </body>
 </html>
