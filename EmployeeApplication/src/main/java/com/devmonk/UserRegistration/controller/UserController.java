@@ -2,6 +2,7 @@ package com.devmonk.UserRegistration.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.User;
+import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
 
@@ -42,6 +44,12 @@ public class UserController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	 @Autowired
+	 private UserRepository userRepository;
+	 
+	 @Autowired
+	 private EmployeeRepository employeeRepository;
 	
 	
 	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService) {
@@ -73,16 +81,39 @@ public class UserController {
     }
     
     //populate user page
-    @GetMapping("user-page")
+    @GetMapping("user/{id}")
     public String userPage(Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-        // Call the viewHomePage method to populate the user page
-        viewHomePage(model);
-        // Return the user page view
+        String username = principal.getName();
+        // Fetch the user details based on the username
+        User user = userRepository.findByEmail(username);
+        // Fetch the employee details associated with the user
+        Employee employee = user.getEmployee();
+        model.addAttribute("employee", employee);
         return "user";
     }
+    
+    //update employee for each users
+    @PostMapping("/updateEmployee/{id}")
+    public String updateEmployee(@PathVariable("id") Long id, @ModelAttribute("employee") Employee employee) throws Exception {
+    	Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        
+    	if (optionalEmployee.isPresent()) {
+    	    Employee existingEmployee = optionalEmployee.get();
+    	    existingEmployee.setFirstName(employee.getFirstName());
+    	    existingEmployee.setLastName(employee.getLastName());
+    	    existingEmployee.setEmail(employee.getEmail());
+    	    existingEmployee.setAddress(employee.getAddress());
+    	    existingEmployee.setPhoneNumber(employee.getPhoneNumber());
+    	    existingEmployee.setCountry(employee.getCountry());
+    	    employeeRepository.save(existingEmployee);
+    	}
+    	else {
+    		throw new Exception ("Employee details not found..!");
+    	}
+        return "redirect:/user/{id}";
+    }
 
+    
     //populate admin page
     @GetMapping("admin-page")
     public String viewHomePage(Model model) {

@@ -16,8 +16,31 @@ public class Employee {
 	@Column(name = "last_name")
 	private String lastName;
 	
+	@Column(name = "address")
+	private String address;
+	
+	@Column(name = "phoneNumber")
+	private String phoneNumber;
+	
 	@Column(name = "email")
 	private String email;
+	
+	@Column(name = "country")
+	private String country;
+	
+	@Column(name = "photo")
+	private String photo;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private User user;
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public long getId() {
 		return id;
 	}
@@ -42,4 +65,30 @@ public class Employee {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	public String getPhoto() {
+		return photo;
+	}
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	
 }

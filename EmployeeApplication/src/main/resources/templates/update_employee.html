@@ -1,36 +1,99 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Employee Management System</title>
-<!-- update button -->
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <title>Employee Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        form {
+            margin-top: 30px;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        #preview {
+            margin-top: 20px;
+            max-width: 200px; /* Adjust as needed */
+            max-height: 200px; /* Adjust as needed */
+        }
+    </style>
 </head>
 <body>
-	<div class="container">
-		<h1>Employee Management System</h1>
-		<hr>
-		<h2>Update Employee</h2>
+    <div class="container">
+        <h1 class="text-center">Employee Management System</h1>
+        <hr>
+        <h2>Update Employee</h2>
 
-		<form action="#" th:action="@{/saveEmployee}" th:object="${employee}"
-			method="POST">
-			
-			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
-			
-			<input type="text" th:field="*{firstName}" class="form-control mb-4 col-4">
-				
-				<input type="text" th:field="*{lastName}" class="form-control mb-4 col-4">
-				
-				<input type="text" th:field="*{email}" class="form-control mb-4 col-4">
-				
-				<button type="submit" class="btn btn-info col-2"> Update Employee</button>
-		</form>
-		
-		<hr>
-		
-		<a th:href = "@{/admin-page}"> Back to Employee List</a>
-	</div>
+        <form action="#" th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" th:field="*{firstName}" class="form-control col-md-4" placeholder="First Name">
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" th:field="*{lastName}" class="form-control col-md-4" placeholder="Last Name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="text" th:field="*{email}" class="form-control col-md-4" placeholder="Email">
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" class="form-control col-md-4">
+                    <!-- Include options for all countries -->
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <!-- Add more options for other countries -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" th:field="*{address}" class="form-control col-md-4" placeholder="Address">
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" th:field="*{phoneNumber}" class="form-control col-md-4" placeholder="Phone Number">
+            </div>
+
+            <button type="submit" class="btn btn-info">Update Employee</button>
+        </form>
+
+        <hr>
+
+        <a th:href="@{/admin-page}">Back to Employee List</a>
+    </div>
+
+    <script>
+        // Preview uploaded image before submission
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function() {
+                var preview = document.getElementById('preview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        // Attach event listener to file input
+        var photoInput = document.getElementById('photo');
+        photoInput.addEventListener('change', previewImage);
+    </script>
 </body>
 </html>

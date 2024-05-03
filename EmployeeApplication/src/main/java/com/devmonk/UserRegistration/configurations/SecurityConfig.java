@@ -37,9 +37,10 @@ public class SecurityConfig {
 		http.csrf(c -> c.disable())
 		
 		.authorizeHttpRequests(request -> request.requestMatchers("/showNewEmployeeForm")
-				.hasAuthority("ADMIN").requestMatchers("/user-page").hasAuthority("USER")
+				.hasAuthority("ADMIN").requestMatchers("/user/**").hasAuthority("USER")
 				.requestMatchers("/registration", "/css/**", "/registration/verify", 
-						"/password-recovery", "/forgot-password", "/reset-password").permitAll()
+						"/password-recovery", "/forgot-password", "/reset-password", 
+						"/editProfile").permitAll()
 				.anyRequest().authenticated())
 		
 		.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")
