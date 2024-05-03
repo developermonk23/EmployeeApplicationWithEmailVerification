@@ -1,12 +1,6 @@
 package com.devmonk.UserRegistration.service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
-import com.devmonk.UserRegistration.dto.UserDto;
 import com.devmonk.UserRegistration.model.User;
-
-import jakarta.mail.MessagingException;
 
 public interface UserService {
 	
