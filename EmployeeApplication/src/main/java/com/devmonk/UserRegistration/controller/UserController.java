@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.User;
@@ -92,26 +93,39 @@ public class UserController {
         return "user";
     }
     
+    @GetMapping("user/{id}/editDetails")
+    public String userUpdateDetailsPage(Model model, Principal principal) {
+        String username = principal.getName();
+        // Fetch the user details based on the username
+        User user = userRepository.findByEmail(username);
+        // Fetch the employee details associated with the user
+        Employee employee = user.getEmployee();
+        model.addAttribute("employee", employee);
+        return "edit_personal_details";
+    }
+    
     //update employee for each users
     @PostMapping("/updateEmployee/{id}")
-    public String updateEmployee(@PathVariable("id") Long id, @ModelAttribute("employee") Employee employee) throws Exception {
-    	Optional<Employee> optionalEmployee = employeeRepository.findById(id);
-        
-    	if (optionalEmployee.isPresent()) {
-    	    Employee existingEmployee = optionalEmployee.get();
-    	    existingEmployee.setFirstName(employee.getFirstName());
-    	    existingEmployee.setLastName(employee.getLastName());
-    	    existingEmployee.setEmail(employee.getEmail());
-    	    existingEmployee.setAddress(employee.getAddress());
-    	    existingEmployee.setPhoneNumber(employee.getPhoneNumber());
-    	    existingEmployee.setCountry(employee.getCountry());
-    	    employeeRepository.save(existingEmployee);
-    	}
-    	else {
-    		throw new Exception ("Employee details not found..!");
-    	}
+    public String updateEmployee(@PathVariable("id") Long id, @ModelAttribute("employee") Employee employee, RedirectAttributes redirectAttributes) throws Exception {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+
+        if (optionalEmployee.isPresent()) {
+            Employee existingEmployee = optionalEmployee.get();
+            existingEmployee.setFirstName(employee.getFirstName());
+            existingEmployee.setLastName(employee.getLastName());
+            existingEmployee.setEmail(employee.getEmail());
+            existingEmployee.setAddress(employee.getAddress());
+            existingEmployee.setPhoneNumber(employee.getPhoneNumber());
+            existingEmployee.setCountry(employee.getCountry());
+            employeeRepository.save(existingEmployee);
+            //this will show the sucess message in redirect page instead of same page
+            redirectAttributes.addFlashAttribute("successMessage", "Employee details updated successfully.");
+        } else {
+            throw new Exception("Employee details not found..!");
+        }
         return "redirect:/user/{id}";
     }
+
 
     
     //populate admin page
