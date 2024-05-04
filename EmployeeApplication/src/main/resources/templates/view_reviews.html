@@ -2,11 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Reviews and Ratings</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
         }
         .container {
             margin-top: 50px;
@@ -14,6 +17,7 @@
         h1 {
             color: #007bff;
             margin-bottom: 30px;
+            text-align: center;
         }
         h2 {
             color: #343a40;
@@ -44,11 +48,28 @@
         .rating {
             color: #ffc107;
         }
+        .back-button {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px; /* Make button rounded */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center">Reviews and Ratings</h1>
+        <!-- Back button -->
+        <a class="back-button" onclick="history.back()">
+            <i class="fas fa-arrow-left mr-2"></i> Back
+        </a>
+        <h1>Reviews and Ratings</h1>
         <hr>
         <div class="card">
             <div class="card-header">
@@ -73,11 +94,4 @@
                                 <th scope="row">Review:</th>
                                 <td th:text="${employee.review}"></td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+      

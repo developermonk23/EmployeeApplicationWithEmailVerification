@@ -43,6 +43,19 @@
             padding: 15px;
             border-radius: 5px;
         }
+        .logout-container {
+            margin-top: 20px;
+            text-align: left; 
+            margin-left: 190px; 
+        }
+        .btn-danger {
+            background-color: #dc3545; 
+            border-color: #dc3545; 
+        }
+        .btn-danger:hover {
+            background-color: #c82333; 
+            border-color: #bd2130; 
+        }
     </style>
 </head>
 <body>
@@ -55,6 +68,9 @@
             <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/editDetails'}">Edit Personal Details</a>
             <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/viewReviews'}">View Review and Ratings</a>
         </div>
+    </div>
+    <div class="logout-container">
+        <a href="#" class="btn btn-danger" th:href="@{'/logout'}">Logout</a>
     </div>
 </body>
 </html>
