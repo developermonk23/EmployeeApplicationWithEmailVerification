@@ -41,6 +41,9 @@
 </head>
 <body>
     <div class="container">
+    	<a class="back-button" th:href="@{/admin-page}">
+    		<i class="fas fa-arrow-left back-icon"></i> Back to Employee List
+		</a>
         <h1 class="text-center">Employee Management System</h1>
         <hr>
         <h2>Update Employee</h2>
@@ -68,9 +71,15 @@
 
                     <div class="form-group">
                         <label for="country">Country:</label>
-                        <select id="country" name="country" class="form-control">
-                            <option value="USA">USA</option>
-                            <option value="Canada">Canada</option>
+                        <select id="country" name="country" class="form-control" th:field="*{country}">
+                            <option value="Australia">Australia</option>
+		                	<option value="Canada">Canada</option>
+		                	<option value="China">China</option>
+		                	<option value="India">India</option>
+		                	<option value="Japan">Japan</option>
+		                	<option value="New Zealand">New Zealand</option>
+		                	<option value="UK">UK</option>
+		                    <option value="USA">USA</option>
                         </select>
                     </div>
 
@@ -106,8 +115,6 @@
         </form>
 
         <hr>
-
-        <a th:href="@{/admin-page}" class="btn btn-secondary">Back to Employee List</a>
     </div>
 </body>
 </html>
