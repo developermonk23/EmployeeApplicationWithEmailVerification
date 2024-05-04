@@ -35,7 +35,7 @@ public class Employee {
 	private String review;
 	
 	@Column(name = "rating")
-	private String rating;
+	private Integer rating;
 	
 	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
@@ -101,10 +101,10 @@ public class Employee {
 	public void setReview(String review) {
 		this.review = review;
 	}
-	public String getRating() {
+	public Integer getRating() {
 		return rating;
 	}
-	public void setRating(String rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
 	
