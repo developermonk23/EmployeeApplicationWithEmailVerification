@@ -125,6 +125,19 @@ public class UserController {
         }
         return "redirect:/user/{id}";
     }
+    
+    @GetMapping("user/{id}/viewReviews")
+    public String viewReviews(@PathVariable("id") Long id, Model model) {
+        // Fetch the employee details based on the id
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            model.addAttribute("employee", employee);
+            return "view_reviews";
+        } else {
+            return "error";
+        }
+    }
 
 
     
