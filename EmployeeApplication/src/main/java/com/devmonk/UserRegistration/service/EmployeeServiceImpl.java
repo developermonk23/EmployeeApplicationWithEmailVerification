@@ -12,11 +12,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -25,6 +29,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -33,8 +40,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public void saveEmployee(Employee employee) {
+		if(employee.getRating() != null || employee.getReview() !=null) {
+			sendEmailNotification (employee.getEmail());
+		}
 		this.employeeRepository.save(employee);
 	}
+	
+	public void sendEmailNotification(String email) {
+		String Login = "http://localhost:8080/login";
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+
+        String htmlMsg = "<p>To see the review, click here: <a href=\"" + Login + "\">Login</a></p>";
+        try {
+        	helper.setTo(email);
+            helper.setSubject("Review is updated");
+            helper.setText(htmlMsg, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        
+    }
 
 	@Override
 	public Employee getEmployeeById(long id) {
