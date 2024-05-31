@@ -8,11 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-image: url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
             font-family: Arial, sans-serif;
         }
         .container {
             margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
         }
         h1 {
             color: #007bff;
@@ -27,20 +35,21 @@
             color: #6c757d;
         }
         .card {
-            border: 1px solid #dee2e6;
+            border: none;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
         .card-header {
             background-color: #007bff;
             color: #fff;
-            border-bottom: none;
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
+            padding: 15px;
         }
         .card-body {
             padding: 20px;
+            color: #333;
         }
         .table th, .table td {
             vertical-align: middle;
@@ -57,6 +66,8 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
         }
         .back-button:hover {
             background-color: #5a6268;
@@ -94,4 +105,11 @@
                                 <th scope="row">Review:</th>
                                 <td th:text="${employee.review}"></td>
                             </tr>
-      
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

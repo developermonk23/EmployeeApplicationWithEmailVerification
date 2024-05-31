@@ -7,17 +7,23 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-image: url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            color: #fff;
         }
 
         .container {
-            margin-top: 20px;
-            background-color: #fff;
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 30px;
         }
 
         h1 {
@@ -25,9 +31,13 @@
             margin-bottom: 20px;
         }
 
+        .btn-primary, .btn-export, .btn-danger {
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
         .btn-primary {
             background-color: #007bff;
-            border: none;
         }
 
         .btn-primary:hover {
@@ -36,14 +46,19 @@
 
         .btn-export {
             background-color: #28a745; /* Green */
-            border: none;
+            color: #fff; /* White font color */
         }
 
         .btn-export:hover {
             background-color: #218838; /* Darker green */
         }
 
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
         .table {
+            background-color: #fff;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -56,11 +71,50 @@
 
         td {
             text-align: center;
+            color: #333;
         }
 
         .pagination {
             justify-content: center;
             margin-top: 20px;
+        }
+
+        .form-inline {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            margin-right: 10px;
+        }
+
+        .logout-button {
+            background-color: #dc3545;
+            border: none;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px; /* Make button rounded */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -70,23 +124,31 @@
     <h1 class="text-center">Employees List</h1>
 
     <!-- Add employee button -->
-    <a th:href="@{/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Add Employee </a>
-	
-	<form th:action="@{/search}" method="get" class="form-inline mb-3">
-    	<input type="text" name="keyword" class="form-control mr-2" placeholder="Search">
-    	<button type="submit" class="btn btn-primary">Search</button>
-	</form>
-	
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div></div> <!-- This is a spacer to push the "Export User Details" button to the right -->
-        <a class="btn btn-primary btn-export" th:href="@{/excel}">Export User Details</a>
+    <a th:href="@{/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3">
+        <i class="fas fa-plus mr-2"></i> Add Employee
+    </a>
+    
+    <!-- Search form -->
+    <form th:action="@{/search}" method="get" class="form-inline mb-3">
+        <input type="text" name="keyword" class="form-control" placeholder="Search">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search mr-2"></i> Search
+        </button>
+    </form>
+
+    <!-- Export button -->
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-export" th:href="@{/excel}">
+            <i class="fas fa-file-excel mr-2"></i> Export User Details
+        </a>
     </div>
 
+    <!-- Employees table -->
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
-            	<th>No.</th>
+                <th>No.</th>
                 <th>Employee First Name</th>
                 <th>Employee Last Name</th>
                 <th>Employee Email</th>
@@ -95,41 +157,50 @@
             </thead>
             <tbody>
             <!-- ${listEmployees} will be received from controller and is iterated -->
-            <tr th:each="employee ,index: ${listEmployees}">
-             	<td th:text="${index.index + 1}"></td>
+            <tr th:each="employee, index: ${listEmployees}">
+                <td th:text="${index.index + 1}"></td>
                 <td th:text="${employee.firstName}"></td>
                 <td th:text="${employee.lastName}"></td>
                 <td th:text="${employee.email}"></td>
                 <td>
-                    <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">Update</a>
-                    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Update
+                    </a>
+                    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
+    <!-- Pagination -->
     <nav aria-label="Page navigation" th:if="${totalPages > 0}">
-    <ul class="pagination justify-content-center">
-        <li class="page-item">
-            <a class="page-link"
-               th:href="@{'/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-               th:text="1"></a>
-        </li>
-        <li class="page-item" th:each="i: ${#numbers.sequence(2, totalPages)}">
-            <a class="page-link"
-               th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-               th:classappend="${currentPage == i} ? 'active' : ''"
-               th:text="${i}"></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-               th:if="${currentPage < totalPages}">Next</a>
-        </li>
-    </ul>
-</nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{'/page/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                   th:text="1"></a>
+            </li>
+            <li class="page-item" th:each="i: ${#numbers.sequence(2, totalPages)}">
+                <a class="page-link"
+                   th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                   th:classappend="${currentPage == i} ? 'active' : ''"
+                   th:text="${i}"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link"
+                   th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                   th:if="${currentPage < totalPages}">Next</a>
+            </li>
+        </ul>
+    </nav>
 
-    <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+    <!-- Logout button -->
+    <a class="btn btn-danger logout-button" th:href="@{/logout}">
+        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+    </a>
 </div>
 </body>
 </html>
