@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <title>User Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background-image: url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
         }
         .container {
             margin-top: 50px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -18,6 +23,7 @@
         h1 {
             color: #007bff;
             text-align: center;
+            font-size: 2.5rem;
         }
         .btn-container {
             margin-top: 20px;
@@ -30,7 +36,11 @@
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
+            font-size: 1.2rem;
             transition: background-color 0.3s ease;
+        }
+        .btn i {
+            margin-right: 10px;
         }
         .btn:hover {
             background-color: #0056b3;
@@ -42,19 +52,23 @@
             color: #155724;
             padding: 15px;
             border-radius: 5px;
+            text-align: center;
+            font-size: 1.1rem;
         }
         .logout-container {
             margin-top: 20px;
-            text-align: left; 
-            margin-left: 190px; 
+            text-align: left;
+            margin-left: 190px;
         }
         .btn-danger {
-            background-color: #dc3545; 
-            border-color: #dc3545; 
+            background-color: #dc3545;
+            border-color: #dc3545;
+            font-size: 1.2rem;
+            padding: 10px 20px;
         }
         .btn-danger:hover {
-            background-color: #c82333; 
-            border-color: #bd2130; 
+            background-color: #c82333;
+            border-color: #bd2130;
         }
     </style>
 </head>
@@ -65,12 +79,18 @@
         <!-- Success message -->
         <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
         <div class="btn-container">
-            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/editDetails'}">Edit Personal Details</a>
-            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/viewReviews'}">View Review and Ratings</a>
+            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/editDetails'}">
+                <i class="fas fa-user-edit"></i>Edit Personal Details
+            </a>
+            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/viewReviews'}">
+                <i class="fas fa-star"></i>View Review and Ratings
+            </a>
         </div>
     </div>
     <div class="logout-container">
-        <a href="#" class="btn btn-danger" th:href="@{'/logout'}">Logout</a>
+        <a href="#" class="btn btn-danger" th:href="@{'/logout'}">
+            <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
     </div>
 </body>
 </html>
