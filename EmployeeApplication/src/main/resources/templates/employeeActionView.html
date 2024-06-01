@@ -94,14 +94,31 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
+        .activity-status-button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px; /* Make button rounded */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .activity-status-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <a class="back-button" th:href="@{/admin-page}">
-    		<i class="fas fa-arrow-left back-icon"></i> Back to Employee List
-		</a>
+        <i class="fas fa-arrow-left back-icon"></i> Back to Employee List
+    </a>
 
     <h1 class="text-center" th:text="'Details of ' + ${employee.firstName} + ' ' + ${employee.lastName}"></h1>
 
@@ -172,6 +189,9 @@
     <hr>
     <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">
         <i class="fas fa-trash-alt"></i> Delete
+    </a>
+    <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="activity-status-button">
+        <i class="fas fa-list"></i> Activity Status
     </a>
 </div>
 </body>

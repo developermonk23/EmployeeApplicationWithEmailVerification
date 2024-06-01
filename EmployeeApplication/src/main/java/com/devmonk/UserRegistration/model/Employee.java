@@ -107,6 +107,12 @@ public class Employee {
 	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
-	
+	// Default constructor
+    public Employee() {}
+
+    // Constructor with id
+    public Employee(Long id) {
+        this.id = id;
+    }
 	
 }
