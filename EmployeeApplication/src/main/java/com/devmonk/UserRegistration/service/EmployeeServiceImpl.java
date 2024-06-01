@@ -1,6 +1,7 @@
 package com.devmonk.UserRegistration.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.repository.ActivityLogRepository;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
 
 import jakarta.mail.MessagingException;
@@ -32,6 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	@Autowired
 	private JavaMailSender mailSender;
+	
+	@Autowired
+    private ActivityLogRepository activityLogRepository;
 
 	@Override
 	public List<Employee> getAllEmployees() {
@@ -44,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			sendEmailNotification (employee.getEmail());
 		}
 		this.employeeRepository.save(employee);
+		logActivity(employee.getId(), "Save", "Employee details saved");
 	}
 	
 	public void sendEmailNotification(String email) {
@@ -78,6 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void deleteEmployeeById(long id) {
 		this.employeeRepository.deleteById(id);
+		logActivity(id, "Delete", "Employee deleted");
 	}
 
 	@Override
@@ -119,8 +127,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 		workbook.write(ops);
 		workbook.close();
 		ops.close();
-		
 	}
+	@Override
+	public List<ActivityLog> getActivityLogsByEmployeeId(Long employeeId) {
+        return activityLogRepository.findByEmployeeId(employeeId);
+    }
+	
+	@Override
+	public void logActivity(Long employeeId, String action, String description) {
+        ActivityLog log = new ActivityLog();
+        log.setEmployee(new Employee(employeeId));  // Assuming Employee has a constructor with id
+        log.setTimestamp(LocalDateTime.now());
+        log.setAction(action);
+        log.setDescription(description);
+        activityLogRepository.save(log);
+    }
 
 
 }

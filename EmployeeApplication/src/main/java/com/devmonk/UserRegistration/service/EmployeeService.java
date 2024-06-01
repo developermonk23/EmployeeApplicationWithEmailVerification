@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,4 +18,6 @@ public interface EmployeeService {
 	Page<Employee> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
 	List<Employee> searchEmployees(String keyword);
 	void generateExcel(HttpServletResponse response) throws IOException;
+	List<ActivityLog> getActivityLogsByEmployeeId(Long employeeId);
+	void logActivity(Long employeeId, String action, String description);
 }

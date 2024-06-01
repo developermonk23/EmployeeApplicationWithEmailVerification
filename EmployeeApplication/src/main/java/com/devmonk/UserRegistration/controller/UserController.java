@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
@@ -51,8 +52,7 @@ public class UserController {
 	 
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
-	
-	
+	 
 	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService) {
         this.userService = userService;
         this.employeeService = employeeService;
@@ -118,6 +118,7 @@ public class UserController {
             existingEmployee.setPhoneNumber(employee.getPhoneNumber());
             existingEmployee.setCountry(employee.getCountry());
             employeeRepository.save(existingEmployee);
+            employeeService.logActivity(id, "Update", "Employee details updated");
             //this will show the sucess message in redirect page instead of same page
             redirectAttributes.addFlashAttribute("successMessage", "Employee details updated successfully.");
         } else {
@@ -293,6 +294,17 @@ public class UserController {
         Employee employee = employeeService.getEmployeeById(id);
         model.addAttribute("employee", employee);
         return "employeeActionView"; // View name for the employee details page
+    }
+    
+    @GetMapping("/activityStatus/{id}")
+    public String viewActivityStatus(@PathVariable("id") Long employeeId, Model model) {
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        List<ActivityLog> activityLogs = employeeService.getActivityLogsByEmployeeId(employeeId);
+
+        model.addAttribute("employee", employee);
+        model.addAttribute("activityLogs", activityLogs);
+        
+        return "activity-status";
     }
 
 }
