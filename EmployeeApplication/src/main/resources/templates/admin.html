@@ -149,27 +149,20 @@
             <thead>
             <tr>
                 <th>No.</th>
-                <th>Employee First Name</th>
-                <th>Employee Last Name</th>
-                <th>Employee Email</th>
-                <th>Actions</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
             </tr>
             </thead>
             <tbody>
             <!-- ${listEmployees} will be received from controller and is iterated -->
             <tr th:each="employee, index: ${listEmployees}">
                 <td th:text="${index.index + 1}"></td>
-                <td th:text="${employee.firstName}"></td>
+                <td>
+                    <a th:href="@{/employeeDetails/{id}(id=${employee.id})}" th:text="${employee.firstName}"></a>
+                </td>
                 <td th:text="${employee.lastName}"></td>
                 <td th:text="${employee.email}"></td>
-                <td>
-                    <a th:href="@{/showFormForUpdate/{id}(id=${employee.id})}" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> Update
-                    </a>
-                    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger">
-                        <i class="fas fa-trash-alt"></i> Delete
-                    </a>
-                </td>
             </tr>
             </tbody>
         </table>
