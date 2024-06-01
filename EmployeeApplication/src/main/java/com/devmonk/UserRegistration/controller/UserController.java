@@ -83,10 +83,11 @@ public class UserController {
     
     //populate user page
     @GetMapping("user/{id}")
-    public String userPage(Model model, Principal principal) {
+    public String userPage(@PathVariable("id") Long employeeId ,Model model, Principal principal) {
         String username = principal.getName();
         // Fetch the user details based on the username
         User user = userRepository.findByEmail(username);
+        employeeService.logActivity(employeeId, "Login", "User logged in");
         // Fetch the employee details associated with the user
         Employee employee = user.getEmployee();
         model.addAttribute("employee", employee);
