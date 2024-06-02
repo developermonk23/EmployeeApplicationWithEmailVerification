@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void saveEmployee(Employee employee) {
-        if (employee.getRating() != null || employee.getReview() != null) {
+        if (employee.getRating()!= null && !employee.getReview().isEmpty()) { 
             sendEmailNotification(employee.getEmail());
         }
         this.employeeRepository.save(employee);
