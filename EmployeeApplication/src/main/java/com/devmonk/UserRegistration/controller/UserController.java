@@ -25,8 +25,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.LeaveRequestRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
@@ -54,6 +56,9 @@ public class UserController {
 	 
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
+	 
+	 @Autowired
+	 private LeaveRequestRepository leaveRequestRepository;
 	 
 	 private final LocaleResolver localeResolver;
 	 
@@ -319,6 +324,40 @@ public class UserController {
         model.addAttribute("activityLogs", activityLogs);
         
         return "activity-status";
+    }
+    
+    @GetMapping("/leave/apply")
+    public String showLeaveApplicationForm(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        Employee employee = user.getEmployee();
+        model.addAttribute("leaveRequest", new LeaveRequest());
+        return "apply_leave"; // This should match the name of your Thymeleaf template (apply_leave.html)
+    }
+
+    @PostMapping("/leave/apply")
+    public String applyForLeave(@ModelAttribute("leaveRequest") LeaveRequest leaveRequest, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        Employee employee = user.getEmployee();
+        leaveRequest.setEmployee(employee);
+        employeeService.applyForLeave(leaveRequest);
+        return "redirect:/user/" + employee.getId(); // Redirect to user profile page or another appropriate page
+    }
+
+    @GetMapping("/leave/approve/{id}")
+    public String approveLeave(@PathVariable Long id, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        employeeService.approveLeave(id, user.getId());
+        return "redirect:/admin-page";
+    }
+
+    @GetMapping("/leave/view/{id}")
+    public String viewLeaveRequests(Model model, Principal principal, @PathVariable("id") Long employeeId) {
+    	List<LeaveRequest> leaveRequests = employeeService.findLeaveRequestsByEmployeeId(employeeId);
+        model.addAttribute("leaveRequests", leaveRequests);
+        return "view_leave_requests";
     }
 
 }
