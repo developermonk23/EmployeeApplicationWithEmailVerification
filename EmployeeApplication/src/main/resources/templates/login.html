@@ -1,11 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
     <link rel="stylesheet" th:href="@{../css/styles.css}">
     <style>
+        /* Header styling */
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #0056b3;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Language selector styling */
+        .language-selector {
+            display: inline-block;
+        }
+
+        .language-selector select {
+            background-color: #fff;
+            color: #007bff;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .language-selector select:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
         .container {
             background-color: #f8f9fa;
             padding: 20px;
@@ -67,39 +105,55 @@
             color: #007bff;
             text-decoration: none;
         }
+
+        .forgot-password-link:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="message" th:if="${param.error}">
-        Invalid Username or Password
-    </div>
-    <div class="message" th:if="${param.logout}">
-        Logout Successfully
+    <!-- Header with Language Selector -->
+    <div class="header">
+        <h1 th:text="#{login.title}">Login Page</h1>
+        <div class="language-selector">
+            <form th:action="@{/change-language}" method="get">
+                <select name="lang" onchange="this.form.submit()">
+                    <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
+                    <option value="es" th:text="#{language.spanish}" th:selected="${#locale.language == 'es'}">Spanish</option>
+                    <option value="fr" th:text="#{language.french}" th:selected="${#locale.language == 'fr'}">French</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </form>
+        </div>
     </div>
 
-    <h2>Login Page</h2>
-    <form
-            th:action="@{/login}"
-            method="post"
-    >
-        <div class="form-group">
-            <label for="username">Email:</label>
-            <input type="email" id="username" name="username" placeholder="Enter your email" required>
+    <div class="container">
+        <div class="message" th:if="${param.error}">
+            Invalid Username or Password
+        </div>
+        <div class="message" th:if="${param.logout}">
+            Logout Successfully
         </div>
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <input type="submit" value="Login">
-    </form>
-    
-    <!-- Forgot Password link -->
-    <a class="forgot-password-link" th:href="@{/password-recovery}" style="margin-bottom: 10px;" >Forgot Password?</a>
-    
-    <!-- Create Account button -->
-    <a class="btn btn-primary" th:href="@{/registration}" style="margin-top: 10px;">Create Account</a>
-</div>
+        <h2 th:text="#{login.titlee}">Login</h2>
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username" th:text="#{login.email}">Email:</label>
+                <input type="email" id="username" name="username" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" th:text="#{login.password}">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <input type="submit" value="Login" th:value="#{login.button}">
+        </form>
+        
+        <!-- Forgot Password link -->
+        <a class="forgot-password-link" th:href="@{/password-recovery}" th:text="#{login.forgotPassword}" style="margin-bottom: 10px;">Forgot Password?</a>
+        
+        <!-- Create Account button -->
+        <a class="btn btn-primary" th:href="@{/registration}" th:text="#{login.createAccount}" style="margin-top: 10px;">Create Account</a>
+    </div>
 </body>
 </html>
