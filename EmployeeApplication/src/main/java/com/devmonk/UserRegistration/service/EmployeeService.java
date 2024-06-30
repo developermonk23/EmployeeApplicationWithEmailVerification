@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveRequest;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -20,4 +21,7 @@ public interface EmployeeService {
 	void generateExcel(HttpServletResponse response) throws IOException;
 	List<ActivityLog> getActivityLogsByEmployeeId(Long employeeId);
 	void logActivity(Long employeeId, String action, String description);
+	LeaveRequest applyForLeave(LeaveRequest leaveRequest);
+	LeaveRequest approveLeave(Long leaveRequestId, Long approverId);
+	List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId);
 }

@@ -201,6 +201,10 @@
     <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="activity-status-button">
         <i class="fas fa-list"></i> Activity Status
     </a>
+    <div class="text-center">
+    	<a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary">View Leave Requests</a>
+	</div>
+
 </div>
 </body>
 </html>

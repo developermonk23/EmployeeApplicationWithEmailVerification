@@ -1,7 +1,9 @@
 package com.devmonk.UserRegistration.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +21,17 @@ import org.springframework.stereotype.Service;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveBalance;
+import com.devmonk.UserRegistration.model.LeaveRequest;
+import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.ActivityLogRepository;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
+import com.devmonk.UserRegistration.repository.LeaveRequestRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -38,6 +46,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private ActivityLogRepository activityLogRepository;
+    
+    @Autowired
+    private LeaveRequestRepository leaveRequestRepository;
+
+    @Autowired
+    private LeaveBalanceRepository leaveBalanceRepository;
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -141,5 +155,49 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.setAction(action);
         log.setDescription(description);
         activityLogRepository.save(log);
+    }
+    
+    @Override
+    public LeaveRequest applyForLeave(LeaveRequest leaveRequest) {
+        leaveRequest.setStatus("Pending");
+        leaveRequest.setRequestDate(LocalDate.now());
+        return leaveRequestRepository.save(leaveRequest);
+    }
+    
+    @Override
+    public LeaveRequest approveLeave(Long leaveRequestId, Long approverId) {
+        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new RuntimeException("Leave Request not found"));
+        leaveRequest.setStatus("Approved");
+        leaveRequest.setApprovalDate(LocalDate.now());
+        leaveRequest.setApprover(new User(approverId)); // Assuming you have a User entity
+        leaveRequestRepository.save(leaveRequest);
+
+        // Update Leave Balance
+        LeaveBalance leaveBalance = leaveBalanceRepository.findByEmployeeAndLeaveType(leaveRequest.getEmployee(), leaveRequest.getLeaveType())
+                .orElseThrow(() -> new RuntimeException("Leave Balance not found"));
+        int days = (int) ChronoUnit.DAYS.between(leaveRequest.getStartDate(), leaveRequest.getEndDate()) + 1;
+        leaveBalance.setLeavesTaken(leaveBalance.getLeavesTaken() + days);
+        leaveBalance.setBalance(leaveBalance.getTotalLeaves() - leaveBalance.getLeavesTaken());
+        leaveBalanceRepository.save(leaveBalance);
+
+        return leaveRequest;
+    }
+    
+    @Override
+    public List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId) {
+        // Find Employee by ID (optional, for validation or additional processing)
+        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
+        if (!employeeOptional.isPresent()) {
+            // Handle case where employee with given ID is not found
+            throw new EntityNotFoundException("Employee with ID " + employeeId + " not found");
+        }
+        Employee employee = employeeOptional.get();
+
+        // Find LeaveRequests by Employee
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee(employee);
+
+        // Now you have the leaveRequests associated with the employee
+        return leaveRequests;
     }
 }
