@@ -35,20 +35,24 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		
 		http.csrf(c -> c.disable())
-		
-		.authorizeHttpRequests(request -> request.requestMatchers("/showNewEmployeeForm")
-				.hasAuthority("ADMIN").requestMatchers("/user/**").hasAuthority("USER")
-				.requestMatchers("/registration", "/css/**", "/registration/verify", 
-						"/password-recovery", "/forgot-password", "/reset-password", 
-						"/editProfile").permitAll()
-				.anyRequest().authenticated())
-		
-		.formLogin(form -> form.loginPage("/login").loginProcessingUrl("/login")
-				.successHandler(customSuccessHandler).permitAll())
-		
-		.logout(form -> form.invalidateHttpSession(true).clearAuthentication(true)
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/login?logout").permitAll());
+        .authorizeHttpRequests(request -> request
+            .requestMatchers("/showNewEmployeeForm").hasAuthority("ADMIN")
+            .requestMatchers("/user/**").hasAuthority("USER")
+            .requestMatchers("/registration", "/css/**", "/registration/verify",
+                "/password-recovery", "/forgot-password", "/reset-password",
+                "/editProfile", "/change-language").permitAll()
+            .anyRequest().authenticated())
+        .formLogin(form -> form
+            .loginPage("/login")
+            .loginProcessingUrl("/login")
+            .successHandler(customSuccessHandler)
+            .permitAll())
+        .logout(form -> form
+            .invalidateHttpSession(true)
+            .clearAuthentication(true)
+            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+            .logoutSuccessUrl("/login?logout")
+            .permitAll());
 		
 		return http.build();
 		

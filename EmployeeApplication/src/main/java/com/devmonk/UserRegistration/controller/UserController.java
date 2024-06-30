@@ -2,6 +2,7 @@ package com.devmonk.UserRegistration.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
@@ -53,10 +55,21 @@ public class UserController {
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
 	 
-	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService) {
-        this.userService = userService;
+	 private final LocaleResolver localeResolver;
+	 
+	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService,
+			LocaleResolver localeResolver) {
+        this.localeResolver = localeResolver;
+		this.userService = userService;
         this.employeeService = employeeService;
         this.userDetailsService = userDetailsService;
+    }
+	
+    @GetMapping("/change-language")
+    public String changeLanguage(@RequestParam("lang") String lang, HttpServletRequest request, HttpServletResponse response) {
+        Locale locale = new Locale(lang);
+        localeResolver.setLocale(request, response, locale);
+        return "redirect:" + request.getHeader("Referer");
     }
 	
 	//to populate the registration page

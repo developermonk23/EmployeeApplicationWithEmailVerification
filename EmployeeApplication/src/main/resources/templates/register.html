@@ -1,11 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
     <link rel="stylesheet" th:href="@{../css/styles.css}">
     <style>
+        /* Header styling */
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #0056b3;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Language selector styling */
+        .language-selector {
+            display: inline-block;
+        }
+
+        .language-selector select {
+            background-color: #fff;
+            color: #007bff;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .language-selector select:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
         .container {
             background-color: #f8f9fa;
             padding: 20px;
@@ -73,41 +111,66 @@
             height: 20px;
             margin-right: 5px;
         }
+
+        .btn-primary {
+            display: block;
+            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="message" th:if="${message != null}">
-        <span class="error-icon">
-            <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon">
-        </span>
-        [[${message}]]
+    <!-- Header with Language Selector -->
+    <div class="header">
+        <h1 th:text="#{registration.title}">Registration Page</h1>
+        <div class="language-selector">
+            <form th:action="@{/change-language}" method="get">
+                <select name="lang" onchange="this.form.submit()">
+                    <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
+                    <option value="es" th:text="#{language.spanish}" th:selected="${#locale.language == 'es'}">Spanish</option>
+                    <option value="fr" th:text="#{language.french}" th:selected="${#locale.language == 'fr'}">French</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </form>
+        </div>
     </div>
-    <h2>Registration Form</h2>
-    <form
-            th:action="@{/registration}"
-            method="post"
-            role="form"
-            th:object="${user}"
-    >
-        <div class="form-group">
-            <label for="fullname">Fullname:</label>
-            <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
-        </div>
 
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
+    <div class="container">
+        <div class="message" th:if="${message != null}">
+            <span class="error-icon">
+                <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon">
+            </span>
+            [[${message}]]
         </div>
+        <h2 th:text="#{registration.titlee}">Registration Form</h2>
+        <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
+            <div class="form-group">
+                <label for="fullname" th:text="#{registration.fullname}">Fullname:</label>
+                <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
+            </div>
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
-        </div>
-        <input type="submit" value="Register">
-    </form>
-    <div style="margin-bottom: 10px;"></div> 
-    <a class="btn btn-primary" th:href="@{/login}" style="margin-top: 10px;">Login Here</a>
-</div>
+            <div class="form-group">
+                <label for="email" th:text="#{registration.email}">Email:</label>
+                <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" th:text="#{registration.password}">Password:</label>
+                <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <input type="submit" value="Register" th:value="#{registration.button}">
+        </form>
+        <div style="margin-bottom: 10px;"></div> 
+        <a class="btn btn-primary" th:href="@{/login}" th:text="#{registration.loginHere}" style="margin-top: 10px;">Login Here</a>
+    </div>
 </body>
 </html>
