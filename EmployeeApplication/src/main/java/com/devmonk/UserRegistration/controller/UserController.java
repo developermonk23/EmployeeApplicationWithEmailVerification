@@ -308,7 +308,9 @@ public class UserController {
     @GetMapping("/employeeDetails/{id}")
     public String showEmployeeDetails(@PathVariable Long id, Model model) {
         Employee employee = employeeService.getEmployeeById(id);
+        boolean hasPendingLeaveRequests = employeeService.hasPendingLeaveRequestsForEmployee(id);
         model.addAttribute("employee", employee);
+        model.addAttribute("hasPendingLeaveRequests", hasPendingLeaveRequests);
         return "employeeActionView"; // View name for the employee details page
     }
     

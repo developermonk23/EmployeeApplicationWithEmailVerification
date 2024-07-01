@@ -205,4 +205,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee(employee);
         return leaveRequests;
     }
+    
+    @Override
+    public boolean hasPendingLeaveRequestsForEmployee(Long employeeId) {
+        return leaveRequestRepository.existsByEmployeeIdAndStatus(employeeId, "Pending");
+    }
 }

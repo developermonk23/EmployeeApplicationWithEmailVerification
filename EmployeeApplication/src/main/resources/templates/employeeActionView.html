@@ -132,8 +132,12 @@
         <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="activity-status-button mr-2">
             <i class="fas fa-list"></i> Activity Status
         </a>
-        <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary">
+        <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary position-relative">
             View Leave Requests
+            <span th:if="${hasPendingLeaveRequests}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                1
+                <span class="visually-hidden"> </span>
+            </span>
         </a>
     </div>
 
