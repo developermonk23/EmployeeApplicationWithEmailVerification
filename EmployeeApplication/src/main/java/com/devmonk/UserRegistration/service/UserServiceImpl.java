@@ -10,8 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 
 import jakarta.mail.internet.MimeMessage;
@@ -30,6 +32,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
+	 @Autowired
+	 private LeaveBalanceRepository leaveBalanceRepository;
 
 	@Override
 	public void save(User user, String siteURL) throws Exception{
@@ -91,17 +96,37 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByVerificationCode(verificationCode);
 		
 		if (user == null || user.isEnabled()) {
-			return false;
-		} else {
-			user.setVerificationCode(null);
-			user.setEnabled(true);
-			user.setRole("USER");
-			userRepository.save(user);
-			
-			return true;
+            return false;
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            user.setRole("USER");
+            userRepository.save(user);
+
+            Employee employee = user.getEmployee();
+            if (employee != null) {
+                initializeLeaveBalances(employee);
+            }
+            return true;
 		}
 		
 	}
+	
+	private void createLeaveBalance(Employee employee, String leaveType, int totalLeaves) {
+        LeaveBalance leaveBalance = new LeaveBalance();
+        leaveBalance.setEmployee(employee);
+        leaveBalance.setLeaveType(leaveType);
+        leaveBalance.setTotalLeaves(totalLeaves);
+        leaveBalance.setLeavesTaken(0);
+        leaveBalance.setBalance(totalLeaves);
+        leaveBalanceRepository.save(leaveBalance);
+    }
+	
+	private void initializeLeaveBalances(Employee employee) {
+        createLeaveBalance(employee, "Casual", 10);
+        createLeaveBalance(employee, "Sick", 10);
+        createLeaveBalance(employee, "Earned", 10);
+    }
 	
 	@Override
 	 public void sendPasswordResetEmail(String email, String resetUrl) {
