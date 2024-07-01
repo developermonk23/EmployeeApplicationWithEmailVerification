@@ -150,7 +150,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void logActivity(Long employeeId, String action, String description) {
         ActivityLog log = new ActivityLog();
-        log.setEmployee(new Employee(employeeId));  // Assuming Employee has a constructor with id
+        log.setEmployee(new Employee(employeeId)); 
         log.setTimestamp(LocalDateTime.now());
         log.setAction(action);
         log.setDescription(description);
@@ -170,7 +170,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new RuntimeException("Leave Request not found"));
         leaveRequest.setStatus("Approved");
         leaveRequest.setApprovalDate(LocalDate.now());
-        leaveRequest.setApprover(new User(approverId)); // Assuming you have a User entity
+        leaveRequest.setApprover(new User(approverId));
         leaveRequestRepository.save(leaveRequest);
 
         // Update Leave Balance
@@ -185,19 +185,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     
     @Override
+    public LeaveRequest rejectLeave(Long leaveRequestId, Long approverId) {
+        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+                .orElseThrow(() -> new RuntimeException("Leave Request not found"));
+        leaveRequest.setStatus("Rejected");
+        leaveRequest.setApprovalDate(LocalDate.now());
+        leaveRequestRepository.save(leaveRequest);
+
+        return leaveRequest;
+    }
+    
+    @Override
     public List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId) {
-        // Find Employee by ID (optional, for validation or additional processing)
         Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
         if (!employeeOptional.isPresent()) {
-            // Handle case where employee with given ID is not found
             throw new EntityNotFoundException("Employee with ID " + employeeId + " not found");
         }
         Employee employee = employeeOptional.get();
-
-        // Find LeaveRequests by Employee
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findByEmployee(employee);
-
-        // Now you have the leaveRequests associated with the employee
         return leaveRequests;
     }
 }

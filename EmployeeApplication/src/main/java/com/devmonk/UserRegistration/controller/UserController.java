@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -332,7 +333,7 @@ public class UserController {
         User user = userRepository.findByEmail(username);
         Employee employee = user.getEmployee();
         model.addAttribute("leaveRequest", new LeaveRequest());
-        return "apply_leave"; // This should match the name of your Thymeleaf template (apply_leave.html)
+        return "apply_leave";
     }
 
     @PostMapping("/leave/apply")
@@ -342,17 +343,27 @@ public class UserController {
         Employee employee = user.getEmployee();
         leaveRequest.setEmployee(employee);
         employeeService.applyForLeave(leaveRequest);
-        return "redirect:/user/" + employee.getId(); // Redirect to user profile page or another appropriate page
+        return "redirect:/user/" + employee.getId();
     }
 
     @GetMapping("/leave/approve/{id}")
-    public String approveLeave(@PathVariable Long id, Principal principal) {
+    @ResponseBody
+    public ResponseEntity<String> approveLeave(@PathVariable Long id, Principal principal) {
         String username = principal.getName();
         User user = userRepository.findByEmail(username);
         employeeService.approveLeave(id, user.getId());
-        return "redirect:/admin-page";
+        return ResponseEntity.ok("Leave request approved");
     }
-
+    
+    @GetMapping("/leave/reject/{id}")
+    @ResponseBody
+    public ResponseEntity<String> rejectLeave(@PathVariable Long id, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        employeeService.rejectLeave(id, user.getId());
+        return ResponseEntity.ok("Leave request rejected successfully.");
+    }
+    
     @GetMapping("/leave/view/{id}")
     public String viewLeaveRequests(Model model, Principal principal, @PathVariable("id") Long employeeId) {
     	List<LeaveRequest> leaveRequests = employeeService.findLeaveRequestsByEmployeeId(employeeId);

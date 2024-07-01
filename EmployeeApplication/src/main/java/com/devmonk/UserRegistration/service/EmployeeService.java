@@ -24,4 +24,5 @@ public interface EmployeeService {
 	LeaveRequest applyForLeave(LeaveRequest leaveRequest);
 	LeaveRequest approveLeave(Long leaveRequestId, Long approverId);
 	List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId);
+	LeaveRequest rejectLeave(Long leaveRequestId, Long approverId);
 }
