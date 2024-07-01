@@ -150,7 +150,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void logActivity(Long employeeId, String action, String description) {
         ActivityLog log = new ActivityLog();
-        log.setEmployee(new Employee(employeeId)); 
+        log.setEmployee(new Employee(employeeId));  
         log.setTimestamp(LocalDateTime.now());
         log.setAction(action);
         log.setDescription(description);

@@ -29,7 +29,6 @@ import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
-import com.devmonk.UserRegistration.repository.LeaveRequestRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
@@ -57,9 +56,6 @@ public class UserController {
 	 
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
-	 
-	 @Autowired
-	 private LeaveRequestRepository leaveRequestRepository;
 	 
 	 private final LocaleResolver localeResolver;
 	 
@@ -329,9 +325,6 @@ public class UserController {
     
     @GetMapping("/leave/apply")
     public String showLeaveApplicationForm(Model model, Principal principal) {
-        String username = principal.getName();
-        User user = userRepository.findByEmail(username);
-        Employee employee = user.getEmployee();
         model.addAttribute("leaveRequest", new LeaveRequest());
         return "apply_leave";
     }
