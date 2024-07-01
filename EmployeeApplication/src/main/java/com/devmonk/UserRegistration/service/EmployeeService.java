@@ -25,4 +25,5 @@ public interface EmployeeService {
 	LeaveRequest approveLeave(Long leaveRequestId, Long approverId);
 	List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId);
 	LeaveRequest rejectLeave(Long leaveRequestId, Long approverId);
+	boolean hasPendingLeaveRequestsForEmployee(Long employeeId);
 }
