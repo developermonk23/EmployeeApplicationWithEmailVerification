@@ -57,24 +57,51 @@
                     <td th:text="${leaveRequest.status}"></td>
                     <td>
                         <button th:if="${leaveRequest.status == 'Pending'}"
-                                th:onclick="'approveLeave(' + ${leaveRequest.id} + ')'"
+                                th:data-id="${leaveRequest.id}"
                                 class="btn btn-approve">Approve</button>
                         <button th:if="${leaveRequest.status == 'Pending'}"
-                                th:onclick="'rejectLeave(' + ${leaveRequest.id} + ')'"
+                                th:data-id="${leaveRequest.id}"
                                 class="btn btn-reject">Reject</button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
-        function approveLeave(id) {
-            window.location.href = '/leave/approve/' + id;
-        }
+        $(document).ready(function() {
+            $('.btn-approve').on('click', function() {
+                const id = $(this).data('id');
+                $.ajax({
+                    url: '/leave/approve/' + id,
+                    type: 'GET',
+                    success: function(response) {
+                        const row = $(`[data-id=${id}]`).closest('tr');
+                        row.find('td').eq(3).text('Approved');
+                        row.find('.btn-approve, .btn-reject').remove();
+                    },
+                    error: function(xhr) {
+                        alert('An error occurred while approving the leave request.');
+                    }
+                });
+            });
 
-        function rejectLeave(id) {
-            window.location.href = '/leave/reject/' + id;
-        }
+            $('.btn-reject').on('click', function() {
+                const id = $(this).data('id');
+                $.ajax({
+                    url: '/leave/reject/' + id,
+                    type: 'GET',
+                    success: function(response) {
+                        const row = $(`[data-id=${id}]`).closest('tr');
+                        row.find('td').eq(3).text('Rejected');
+                        row.find('.btn-approve, .btn-reject').remove();
+                    },
+                    error: function(xhr) {
+                        alert('An error occurred while rejecting the leave request.');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
