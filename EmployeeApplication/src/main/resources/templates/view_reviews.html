@@ -95,15 +95,15 @@
                                 <th scope="row">Rating:</th>
                                 <td>
                                     <span class="rating">
-                                        <span th:each="star : ${#numbers.sequence(1, employee.rating)}">&#9733;</span>
-                                        <span th:each="star : ${#numbers.sequence(employee.rating + 1, 5)}">&#9734;</span>
+                                        <span th:each="star : ${#numbers.sequence(1, employee.rating != null ? employee.rating : 0)}">&#9733;</span>
+                                        <span th:each="star : ${#numbers.sequence(employee.rating != null ? employee.rating + 1 : 1, 5)}">&#9734;</span>
                                     </span>
-                                    (<span th:text="${employee.rating}"></span> out of 5)
+                                    (<span th:text="${employee.rating} ?: 'N/A'"></span> out of 5)
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">Review:</th>
-                                <td th:text="${employee.review}"></td>
+                                <td th:text="${employee.review} ?: 'No review available'"></td>
                             </tr>
                         </tbody>
                     </table>
