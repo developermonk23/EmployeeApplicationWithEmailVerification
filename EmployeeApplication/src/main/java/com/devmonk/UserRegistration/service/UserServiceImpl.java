@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
@@ -37,25 +38,32 @@ public class UserServiceImpl implements UserService {
 	 private LeaveBalanceRepository leaveBalanceRepository;
 
 	@Override
+	@Transactional
 	public void save(User user, String siteURL) throws Exception{
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
-		user.setPassword(encodedPassword);
-		String randomCode = UUID.randomUUID().toString();
-		user.setVerificationCode(randomCode);
-		user.setEnabled(false);
+        user.setPassword(encodedPassword);
+        String randomCode = UUID.randomUUID().toString();
+        user.setVerificationCode(randomCode);
+        user.setEnabled(false);
 
-		userRepository.save(user);
-		//every registered user is an employee
-		Employee employee = new Employee();
-		String[] nameParts = user.getFullname().split(" ");
+        // Create and link Employee
+        Employee employee = new Employee();
+        String[] nameParts = user.getFullname().split(" ");
         String firstName = nameParts[0];
         String lastName = (nameParts.length > 1) ? nameParts[1] : "";
         employee.setFirstName(firstName);
         employee.setLastName(lastName);
         employee.setEmail(user.getEmail());
+
         // Set other Employee attributes as needed
+        employee.setUser(user); // Set user in employee
+        user.setEmployee(employee); // Set employee in user
+
+        // Save User and Employee
         employeeRepository.save(employee);
-		sendVerificationEmail(user, siteURL);
+        userRepository.save(user);
+
+        sendVerificationEmail(user, siteURL);
 	}
 	
 	@Override
