@@ -1,61 +1,53 @@
 package com.devmonk.UserRegistration.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	private String email;
-	private String password;
-	private String role;
-	private String fullname;
-	
-	private boolean enabled;
-	private String verificationCode;
-	
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String email;
+    private String password;
+    private String role;
+    private String fullname;
+
+    private boolean enabled;
+    private String verificationCode;
+
     private String resetToken;
-
     private int resetTokenExpiry;
-    
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
-	
-	public Employee getEmployee() {
-		return employee;
-	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
+    // Getters and setters
+    public Employee getEmployee() {
+        return employee;
+    }
 
-	public User() {
-		super();
-	}
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
-	public User(String email, String password, String role, String fullname) {
-		
-		this.email = email;
-		this.password = password;
-		this.role = role;
-		this.fullname = fullname;
-	}
-	
-	public User(Long id) {
-		super();
-		this.id = id;
-	}
+    public User() {
+        super();
+    }
+
+    public User(String email, String password, String role, String fullname) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.fullname = fullname;
+    }
+
+    public User(Long id) {
+        super();
+        this.id = id;
+    }
 
 	public Long getId() {
 		return id;
@@ -128,5 +120,5 @@ public class User {
 	public void setResetTokenExpiry(int resetTokenExpiry) {
 		this.resetTokenExpiry = resetTokenExpiry;
 	}
-	
+    
 }
