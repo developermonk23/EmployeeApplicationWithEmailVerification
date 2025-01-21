@@ -47,7 +47,7 @@
             if ("geolocation" in navigator) {
                 // Ask for the user's location
                 navigator.geolocation.getCurrentPosition(
-                    function (position) {
+                    function (position) { 
                         // Location permission granted
                         submitBtn.disabled = false;
                         locationMessage.textContent = "Location permission granted. You can now apply for WFH.";
