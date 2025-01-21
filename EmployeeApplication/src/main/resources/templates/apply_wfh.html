@@ -55,7 +55,7 @@
                     },
                     function (error) {
                         // Location permission denied or unavailable
-                        if (error.code === error.PERMISSION_DENIED) {
+                        if (error.code === error.PERMISSION_DENIED) { 
                             locationMessage.textContent =
                                 "Location permission is required to apply for Work From Home. Please enable location services.";
                         } else {
