@@ -24,10 +24,12 @@ import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.User;
+import com.devmonk.UserRegistration.model.WorkFromHomeRequest;
 import com.devmonk.UserRegistration.repository.ActivityLogRepository;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
 import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
 import com.devmonk.UserRegistration.repository.LeaveRequestRepository;
+import com.devmonk.UserRegistration.repository.WorkFromHomeRequestRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -52,6 +54,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private LeaveBalanceRepository leaveBalanceRepository;
+    
+    @Autowired
+    private WorkFromHomeRequestRepository wfhRequestRepository;
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -218,6 +223,40 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new EntityNotFoundException("Employee with ID " + employeeId + " not found");
         }
         return leaveBalanceRepository.findByEmployee(employeeOptional.get());
+    }
+    
+    @Override
+    public WorkFromHomeRequest applyForWFH(WorkFromHomeRequest wfhRequest) {
+        wfhRequest.setStatus("Pending");
+        wfhRequest.setRequestDate(LocalDate.now());
+        return wfhRequestRepository.save(wfhRequest);
+    }
+    
+    @Override
+    public List<WorkFromHomeRequest> getWFHRequestsForEmployee(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        return wfhRequestRepository.findByEmployee(employee);
+    }
+    
+    @Override
+    public WorkFromHomeRequest approveWFH(Long wfhRequestId, Long approverId) {
+        WorkFromHomeRequest request = wfhRequestRepository.findById(wfhRequestId)
+                .orElseThrow(() -> new EntityNotFoundException("WFH request not found"));
+        request.setStatus("Approved");
+        request.setApprovalDate(LocalDate.now());
+        request.setApprover(new User(approverId));
+        return wfhRequestRepository.save(request);
+    }
+
+    @Override
+    public WorkFromHomeRequest rejectWFH(Long wfhRequestId, Long approverId) {
+        WorkFromHomeRequest request = wfhRequestRepository.findById(wfhRequestId)
+                .orElseThrow(() -> new EntityNotFoundException("WFH request not found"));
+        request.setStatus("Rejected");
+        request.setApprovalDate(LocalDate.now());
+        request.setApprover(new User(approverId));
+        return wfhRequestRepository.save(request);
     }
 
 }

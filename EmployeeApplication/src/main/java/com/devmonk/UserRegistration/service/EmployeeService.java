@@ -9,6 +9,7 @@ import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
+import com.devmonk.UserRegistration.model.WorkFromHomeRequest;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -28,4 +29,8 @@ public interface EmployeeService {
 	LeaveRequest rejectLeave(Long leaveRequestId, Long approverId);
 	boolean hasPendingLeaveRequestsForEmployee(Long employeeId);
 	List<LeaveBalance> getLeaveBalancesForEmployee(Long employeeId);
+	WorkFromHomeRequest applyForWFH(WorkFromHomeRequest wfhRequest);
+	List<WorkFromHomeRequest> getWFHRequestsForEmployee(Long employeeId);
+	WorkFromHomeRequest approveWFH(Long wfhRequestId, Long approverId);
+	WorkFromHomeRequest rejectWFH(Long wfhRequestId, Long approverId);
 }
