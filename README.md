@@ -15,6 +15,7 @@ Employee Dashboard (Post Login):
 Update Personal Details: Employees can update their personal information.
 View Reviews and Ratings: Employees can view feedback and ratings provided by their manager.
 Apply for Leave: Employees can submit leave requests.
+View balance leaves 
 Logout Option: Users can securely log out of their accounts.
 Admin/Manager Features:
 Employee List Page:
