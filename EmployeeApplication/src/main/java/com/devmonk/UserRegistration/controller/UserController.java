@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,8 +29,8 @@ import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.User;
+import com.devmonk.UserRegistration.model.WorkFromHomeRequest;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
-import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
@@ -380,4 +379,46 @@ public class UserController {
         return "view_leave_requests"; 
     }
     
+    @GetMapping("/wfh/apply")
+    public String showWFHForm(Model model, Principal principal) {
+        model.addAttribute("wfhRequest", new WorkFromHomeRequest());
+        return "apply_wfh";
+    }
+
+    
+    @PostMapping("/apply")
+    public String applyForWFH(@ModelAttribute("wfhRequest") WorkFromHomeRequest wfhRequest, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        Employee employee = user.getEmployee();
+        wfhRequest.setEmployee(employee);
+        employeeService.applyForWFH(wfhRequest);
+        return "redirect:/user/" + employee.getId();
+    }
+    
+    @GetMapping("/wfh/view/{id}")
+    public String viewWFHRequests(@PathVariable("id") Long employeeId, Model model, Principal principal) {
+        List<WorkFromHomeRequest> wfhRequests = employeeService.getWFHRequestsForEmployee(employeeId);
+        model.addAttribute("wfhRequests", wfhRequests);
+        return "view_wfh_requests";
+    }
+    
+    @PostMapping("/approve/{id}")
+    @ResponseBody
+    public ResponseEntity<String> approveWFH(@PathVariable("id") Long wfhRequestId, Principal principal) {
+    	String username = principal.getName();
+    	User user = userRepository.findByEmail(username);
+        employeeService.approveWFH(wfhRequestId, user.getId());
+        return ResponseEntity.ok("WFH request accepted successfully.");
+    }
+
+    @PostMapping("/reject/{id}")
+    @ResponseBody
+    public ResponseEntity<String> rejectWFH(@PathVariable("id") Long wfhRequestId, Principal principal) {
+    	String username = principal.getName();
+    	User user = userRepository.findByEmail(username);
+        employeeService.rejectWFH(wfhRequestId, user.getId());
+        return ResponseEntity.ok("WFH request rejected successfully.");
+    }
+
 }

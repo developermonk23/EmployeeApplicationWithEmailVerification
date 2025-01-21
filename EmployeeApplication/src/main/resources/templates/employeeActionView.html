@@ -113,6 +113,89 @@
         .activity-status-button:hover {
             background-color: #218838;
         }
+        .enhanced-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 50px; /* Rounded buttons */
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient backgrounds for buttons */
+.btn-danger {
+    background: linear-gradient(45deg, #ff5f6d, #ffc371);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border: none;
+}
+
+.btn-info {
+    background: linear-gradient(45deg, #2193b0, #6dd5ed);
+    border: none;
+}
+
+/* Hover effects */
+.enhanced-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
+}
+
+/* Badge Styling */
+.badge {
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 0.4rem 0.6rem;
+    border-radius: 50px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.badge-danger {
+    background: #ff5f6d;
+    color: #fff;
+}
+
+.badge-warning {
+    background: #f6c23e;
+    color: #fff;
+}
+
+.badge i {
+    margin: 0;
+    vertical-align: middle;
+}
+
+/* Animation for badges */
+.badge-danger, .badge-warning {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+        
     </style>
 </head>
 <body>
@@ -126,20 +209,36 @@
 
     <!-- Button Section -->
     <div class="d-flex justify-content-end mb-3">
-        <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger mr-2">
-            <i class="fas fa-trash-alt"></i> Delete
-        </a>
-        <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="activity-status-button mr-2">
-            <i class="fas fa-list"></i> Activity Status
-        </a>
-        <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary position-relative">
-            View Leave Requests
-            <span th:if="${hasPendingLeaveRequests}" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                1
-                <span class="visually-hidden"> </span>
-            </span>
-        </a>
-    </div>
+    <!-- Delete Button -->
+    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger enhanced-btn mr-2">
+        <i class="fas fa-trash-alt"></i> Delete
+    </a>
+
+    <!-- Activity Status Button -->
+    <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="btn btn-success enhanced-btn mr-2">
+        <i class="fas fa-list"></i> Activity Status
+    </a>
+
+    <!-- View Leave Requests Button -->
+    <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary enhanced-btn position-relative mr-2">
+        <i class="fas fa-calendar-alt"></i> Leave Requests
+        <span th:if="${hasPendingLeaveRequests}" 
+              class="badge badge-danger position-absolute top-0 start-100 translate-middle">
+            <i class="fas fa-exclamation-circle"></i>
+        </span>
+    </a>
+
+    <!-- View WFH Requests Button -->
+    <a th:href="@{/wfh/view/{id}(id=${employee.id})}" class="btn btn-info enhanced-btn position-relative">
+    <i class="fas fa-home"></i> WFH Requests
+    <span th:if="${hasPendingWFHRequests}" 
+          class="badge badge-warning position-absolute top-0 start-100 translate-middle">
+        <i class="fas fa-bell"></i>
+    </span>
+	</a>
+</div>
+
+
 
     <!-- Update Form Section -->
     <form action="#" th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
