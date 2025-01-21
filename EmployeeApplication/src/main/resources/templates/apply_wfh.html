@@ -53,7 +53,7 @@
                         locationMessage.textContent = "Location permission granted. You can now apply for WFH.";
                         locationMessage.style.color = "green";
                     },
-                    function (error) {
+                    function (error) { 
                         // Location permission denied or unavailable
                         if (error.code === error.PERMISSION_DENIED) { 
                             locationMessage.textContent =
