@@ -377,7 +377,7 @@ public class UserController {
     public String viewLeaveRequests(Model model, Principal principal, @PathVariable("id") Long employeeId) {
     	List<LeaveRequest> leaveRequests = employeeService.findLeaveRequestsByEmployeeId(employeeId);
         model.addAttribute("leaveRequests", leaveRequests);
-        return "view_leave_requests";
+        return "view_leave_requests"; 
     }
     
 }
