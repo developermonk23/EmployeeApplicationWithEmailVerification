@@ -210,4 +210,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public boolean hasPendingLeaveRequestsForEmployee(Long employeeId) {
         return leaveRequestRepository.existsByEmployeeIdAndStatus(employeeId, "Pending");
     }
+    
+    @Override
+    public List<LeaveBalance> getLeaveBalancesForEmployee(Long employeeId) {
+        Optional<Employee> employeeOptional = employeeRepository.findById(employeeId);
+        if (!employeeOptional.isPresent()) {
+            throw new EntityNotFoundException("Employee with ID " + employeeId + " not found");
+        }
+        return leaveBalanceRepository.findByEmployee(employeeOptional.get());
+    }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -26,9 +27,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
@@ -327,9 +330,20 @@ public class UserController {
     
     @GetMapping("/leave/apply")
     public String showLeaveApplicationForm(Model model, Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+        Employee employee = user.getEmployee();
+
+        // Fetch leave balances for the logged-in employee
+        List<LeaveBalance> leaveBalances = employeeService.getLeaveBalancesForEmployee(employee.getId());
+
+        // Add attributes to the model
+        model.addAttribute("leaveBalances", leaveBalances);
         model.addAttribute("leaveRequest", new LeaveRequest());
+        
         return "apply_leave";
     }
+
 
     @PostMapping("/leave/apply")
     public String applyForLeave(@ModelAttribute("leaveRequest") LeaveRequest leaveRequest, Principal principal) {
@@ -363,7 +377,7 @@ public class UserController {
     public String viewLeaveRequests(Model model, Principal principal, @PathVariable("id") Long employeeId) {
     	List<LeaveRequest> leaveRequests = employeeService.findLeaveRequestsByEmployeeId(employeeId);
         model.addAttribute("leaveRequests", leaveRequests);
-        return "view_leave_requests";
+        return "view_leave_requests"; 
     }
-
+    
 }

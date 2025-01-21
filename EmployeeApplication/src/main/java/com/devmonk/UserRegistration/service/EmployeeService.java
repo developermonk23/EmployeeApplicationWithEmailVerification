@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
+import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,4 +27,5 @@ public interface EmployeeService {
 	List<LeaveRequest> findLeaveRequestsByEmployeeId(Long employeeId);
 	LeaveRequest rejectLeave(Long leaveRequestId, Long approverId);
 	boolean hasPendingLeaveRequestsForEmployee(Long employeeId);
+	List<LeaveBalance> getLeaveBalancesForEmployee(Long employeeId);
 }

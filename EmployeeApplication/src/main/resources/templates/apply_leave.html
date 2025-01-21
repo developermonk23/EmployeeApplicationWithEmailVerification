@@ -6,7 +6,30 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-4">
+        <!-- Leave Balance Section -->
+        <h2>Your Leave Balance</h2>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Leave Type</th>
+                    <th>Total Leaves</th>
+                    <th>Leaves Taken</th>
+                    <th>Remaining Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate through the leaveBalances list -->
+                <tr th:each="balance : ${leaveBalances}">
+                    <td th:text="${balance.leaveType}">Leave Type</td>
+                    <td th:text="${balance.totalLeaves}">Total Leaves</td>
+                    <td th:text="${balance.leavesTaken}">Leaves Taken</td>
+                    <td th:text="${balance.balance}">Remaining Balance</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Apply for Leave Form -->
         <h2>Apply for Leave</h2>
         <form action="#" th:action="@{/leave/apply}" th:object="${leaveRequest}" method="post">
             <div class="form-group">
