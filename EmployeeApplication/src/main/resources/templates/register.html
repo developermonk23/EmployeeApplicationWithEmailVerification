@@ -6,21 +6,33 @@
     <title>Registration Form</title>
     <link rel="stylesheet" th:href="@{../css/styles.css}">
     <style>
+        /* General reset and body styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         /* Header styling */
         .header {
             background-color: #007bff;
             color: #fff;
-            padding: 15px;
-            text-align: right;
+            padding: 20px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 4px solid #0056b3;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
             margin: 0;
             font-size: 24px;
+            font-weight: bold;
         }
 
         /* Language selector styling */
@@ -33,10 +45,10 @@
             color: #007bff;
             border: 1px solid #0056b3;
             border-radius: 5px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .language-selector select:hover {
@@ -44,87 +56,129 @@
             color: #fff;
         }
 
+        /* Main container styling */
         .container {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             max-width: 400px;
-            margin: 0 auto;
-            margin-top: 50px;
+            margin: 50px auto;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h2 {
-            text-align: center;
+            font-size: 28px;
             margin-bottom: 20px;
             color: #007bff;
         }
 
         .form-group {
             margin-bottom: 20px;
+            text-align: left;
         }
 
         label {
             font-weight: bold;
+            margin-bottom: 5px;
+            display: inline-block;
         }
 
         input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px 15px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
         }
 
         input[type="submit"] {
             background-color: #007bff;
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease, transform 0.2s;
             width: 100%;
-            transition: background-color 0.3s;
         }
 
         input[type="submit"]:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
 
+        input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        /* Message styling */
         .message {
             color: #dc3545;
+            font-size: 14px;
             margin-bottom: 20px;
         }
 
         .alert {
             background-color: #f8d7da;
             color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
 
-        .error-icon {
+        .error-icon img {
             width: 20px;
             height: 20px;
+            vertical-align: middle;
             margin-right: 5px;
         }
 
+        /* Button link styling */
         .btn-primary {
-            display: block;
-            text-align: center;
+            display: inline-block;
             background-color: #007bff;
             color: #fff;
             padding: 10px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             text-decoration: none;
-            margin-top: 10px;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.2s;
         }
 
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -138,7 +192,6 @@
                     <option value="en" th:text="#{language.english}" th:selected="${#locale.language == 'en'}">English</option>
                     <option value="es" th:text="#{language.spanish}" th:selected="${#locale.language == 'es'}">Spanish</option>
                     <option value="fr" th:text="#{language.french}" th:selected="${#locale.language == 'fr'}">French</option>
-                    <!-- Add more languages as needed -->
                 </select>
             </form>
         </div>
@@ -169,8 +222,7 @@
             </div>
             <input type="submit" value="Register" th:value="#{registration.button}">
         </form>
-        <div style="margin-bottom: 10px;"></div> 
-        <a class="btn btn-primary" th:href="@{/login}" th:text="#{registration.loginHere}" style="margin-top: 10px;">Login Here</a>
+        <a class="btn-primary" th:href="@{/login}" th:text="#{registration.loginHere}">Login Here</a>
     </div>
 </body>
 </html>
