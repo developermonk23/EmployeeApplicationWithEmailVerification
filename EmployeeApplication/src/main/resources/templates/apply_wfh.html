@@ -5,14 +5,70 @@
     <title>Apply for Work from Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .disabled {
-            pointer-events: none;
-            opacity: 0.6;
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .btn-primary:disabled {
+            background-color: #cccccc;
+        }
+
         #locationMessage {
-            color: red;
+            font-size: 0.9rem;
             margin-top: 10px;
         }
+        #locationMessage {
+        font-size: 0.9rem;
+        margin-top: 10px;
+        color: purple; /* Purple color for the text */
+    }
     </style>
 </head>
 <body>
@@ -58,6 +114,7 @@
                         if (error.code === error.PERMISSION_DENIED) { 
                             locationMessage.textContent =
                                 "Location permission is required to apply for Work From Home. Please enable location services.";
+                            locationMessage.style.color = "red";
                         } else {
                             locationMessage.textContent =
                                 "Unable to fetch your location. Please check your device settings.";
