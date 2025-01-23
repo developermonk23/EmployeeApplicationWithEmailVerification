@@ -60,3 +60,7 @@ Other Tools and Features:
 Pagination for employee lists
 Search functionality
 Authentication and authorization with Spring Security
+
+Work from home feature, wfh can only be applied if location is on.
+
+two factor auuthentication (code via mail)
