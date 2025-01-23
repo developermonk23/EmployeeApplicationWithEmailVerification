@@ -5,7 +5,7 @@ User Features:
 Account Creation with Email Verification
 
 Users receive an email for verification upon creating an account.
-Clicking the verification link activates the account, allowing the user to log in.
+Clicking the verification link activates the account, allowing the user to log in. 
 Forgot Password Functionality
 
 Users can reset their password by entering their email.
