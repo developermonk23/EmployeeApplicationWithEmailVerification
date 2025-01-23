@@ -34,8 +34,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
-	 @Autowired
-	 private LeaveBalanceRepository leaveBalanceRepository;
+	@Autowired
+	private LeaveBalanceRepository leaveBalanceRepository;
+	
 
 	@Override
 	@Transactional
@@ -144,6 +145,16 @@ public class UserServiceImpl implements UserService {
 	        message.setText("To reset your password, click here: " + resetUrl);
 	        mailSender.send(message);
 	    }
+	
+	@Override
+	public void sendTwoFactorCode(String toEmail, String twoFactorCode) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(toEmail);
+        message.setSubject("Your 2FA Code");
+        message.setText("Your 2FA code is: " + twoFactorCode);
+
+        mailSender.send(message);
+    }
 	
 	@Override
 	public void saveUser(User user) throws Exception{

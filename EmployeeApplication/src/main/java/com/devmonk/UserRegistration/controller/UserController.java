@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ import com.devmonk.UserRegistration.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
@@ -98,17 +100,62 @@ public class UserController {
         return "login";
     }
     
-    //populate user page
-    @GetMapping("user/{id}")
-    public String userPage(@PathVariable("id") Long employeeId ,Model model, Principal principal) {
+ // Redirect to 2FA page after login
+    @GetMapping("/2fa")
+    public String showTwoFactorPage(HttpSession session, Principal principal) {
         String username = principal.getName();
-        // Fetch the user details based on the username
+        String generatedCode = generateRandomCode(); // Generate 2FA code
+        
+        session.setAttribute("twoFactorCode", generatedCode);
+
+        userService.sendTwoFactorCode(username, generatedCode);
+
+        return "two_factor_auth";
+    }
+    
+    public String generateRandomCode() {
+        Random random = new Random();
+        int code = 100000 + random.nextInt(900000); // Generates a random 6-digit number
+        return String.valueOf(code); // Convert to String to send to the user
+    }
+
+    // Process 2FA code
+    @PostMapping("/verify-2fa")
+    public String verifyTwoFactorCode(@RequestParam("code") String code, HttpSession session, Principal principal) {
+        String sessionCode = (String) session.getAttribute("twoFactorCode");
+        if (sessionCode != null && sessionCode.equals(code)) {
+            session.removeAttribute("twoFactorCode");
+            session.setAttribute("twoFactorAuthenticated", true);
+            
+            String username = principal.getName();
+            User user = userRepository.findByEmail(username);
+
+            Long employeeId = user.getEmployee().getId();
+
+            // Redirect to the user page with the employeeId as path variable
+            return "redirect:/user/" + employeeId;
+            
+        }
+
+        return "redirect:/2fa?error"; // Redirect back to 2FA page with an error
+    }
+    
+    //populate user page
+    @GetMapping("/user/{id}")
+    public String userPage(@PathVariable("id") Long employeeId, Model model, Principal principal, HttpSession session) {
+        // Check if 2FA is completed
+        Boolean twoFactorAuthenticated = (Boolean) session.getAttribute("twoFactorAuthenticated");
+        if (twoFactorAuthenticated == null || !twoFactorAuthenticated) {
+            return "redirect:/2fa"; // Redirect to 2FA if not authenticated
+        }
+
+        // After 2FA is successful, proceed to fetch user info
+        String username = principal.getName();
         User user = userRepository.findByEmail(username);
-        employeeService.logActivity(employeeId, "Login", "User logged in");
-        // Fetch the employee details associated with the user
         Employee employee = user.getEmployee();
         model.addAttribute("employee", employee);
-        return "user";
+
+        return "user"; // Render user page
     }
     
     @GetMapping("user/{id}/editDetails")

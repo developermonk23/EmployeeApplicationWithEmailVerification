@@ -18,4 +18,6 @@ public interface UserService {
 
 	User findByResetToken(String token);
 
+	void sendTwoFactorCode(String toEmail, String twoFactorCode);
+
 }
