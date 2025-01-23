@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two-Factor Authentication</title>
+    <!-- Import Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(to bottom right, #007bff, #00d4ff);
@@ -12,6 +14,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif; /* Apply stylish font */
         }
 
         .container {
@@ -25,46 +29,123 @@
 
         .container h2 {
             margin-bottom: 20px;
-            color: #007bff;
+            color: #007bff; /* Modern blue color */
+            font-size: 24px; /* Larger font size */
+            font-weight: 600; /* Bold heading */
         }
 
-        input[type="text"],
-        input[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+        .email-check {
+            margin-top: 10px;
+            font-size: 16px; /* Slightly larger text */
+            color: #555; /* Neutral gray color for readability */
+        }
+
+        .pin-container {
+            display: flex; 
+            justify-content: space-between; 
+            gap: 10px; 
+            margin-top: 20px; /* Add space above the input boxes */
+        }
+
+        .pin-input {
+            width: 50px;
+            height: 50px; 
+            padding: 0; 
             border-radius: 5px;
             border: 2px solid #ddd;
-            font-size: 16px;
+            font-size: 18px; 
+            text-align: center;
+            transition: border-color 0.3s; 
         }
 
-        input[type="submit"] {
-            background: #007bff;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
+        .pin-input:focus {
+            border-color: #007bff; 
+            outline: none; 
         }
 
-        input[type="submit"]:hover {
-            background: #0056b3;
+        .message {
+            margin-top: 10px;
+            font-weight: bold; 
+        }
+
+        .success {
+            color: green; /* Green color for success messages */
         }
 
         .error {
-            color: #dc3545;
-            margin-top: 10px;
+            color: #dc3545; /* Red color for error messages */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Enter 2FA Code</h2>
-        <form th:action="@{/verify-2fa}" method="post">
-            <input type="text" name="code" placeholder="Enter 2FA Code" required>
-            <input type="submit" value="Verify">
+        <h2>2FA Verification</h2>
+        <div class="email-check">Enter the code sent to your email.</div>
+        <form th:action="@{/verify-2fa}" method="post" id="twoFactorForm">
+            <div class="pin-container">
+                <input type="text" name="digit1" id="digit1" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit2')" onkeydown="handleKeyDown(event, this, 'digit1')">
+                <input type="text" name="digit2" id="digit2" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit3')" onkeydown="handleKeyDown(event, this, 'digit2')">
+                <input type="text" name="digit3" id="digit3" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit4')" onkeydown="handleKeyDown(event, this, 'digit3')">
+                <input type="text" name="digit4" id="digit4" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit5')" onkeydown="handleKeyDown(event, this, 'digit4')">
+                <input type="text" name="digit5" id="digit5" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit6')" onkeydown="handleKeyDown(event, this, 'digit5')">
+                <input type="text" name="digit6" id="digit6" class="pin-input" maxlength="1" required oninput="verifyCode()" onkeydown="handleKeyDown(event, this, 'digit6')">
+                <!-- Hidden field to store combined code -->
+                <input type="hidden" name="code" id="code">
+            </div>
         </form>
-        <div class="error" th:if="${param.error}">
-            Invalid 2FA Code. Please try again.
-        </div>
+        <div class="message" id="message"></div> <!-- Message display area -->
     </div>
+
+    <script>
+        function moveToNext(currentInput, nextInputId) {
+            if (currentInput.value.length >= currentInput.maxLength) {
+                if (nextInputId) {
+                    document.getElementById(nextInputId).focus();
+                }
+                // Automatically verify when the last digit is entered
+                if (nextInputId === '') {
+                    verifyCode();
+                }
+            }
+        }
+
+        function handleKeyDown(event, currentInput, currentInputId) {
+            // Check if backspace key is pressed
+            if (event.key === "Backspace") {
+                // If the current input is empty and it's not the first input
+                if (currentInput.value === "" && currentInputId !== "digit1") {
+                    const previousInputId = "digit" + (parseInt(currentInputId.replace("digit", "")) - 1);
+                    document.getElementById(previousInputId).focus();
+                }
+            }
+        }
+
+        function verifyCode() {
+            const code = Array.from({ length: 6 }, (_, i) => 
+                document.getElementById(`digit${i + 1}`).value
+            ).join('');
+            
+            document.getElementById('code').value = code; // Set combined value in hidden field
+            
+            // Simulate verification process (replace with actual server-side logic)
+            const form = document.getElementById('twoFactorForm');
+            
+            if (code === "123456") { // Example condition for successful verification
+                form.submit(); // Submit the form to the server for redirection
+            } else {
+                const messageElement = document.getElementById('message');
+                messageElement.innerText = "Invalid 2FA Code. Please try again.";
+                messageElement.className = "message error"; // Set error class
+                clearInputs();
+            }
+        }
+
+        function clearInputs() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`digit${i}`).value = '';
+                if (i === 1) document.getElementById(`digit${i}`).focus(); // Focus first input
+            }
+        }
+    </script>
 </body>
 </html>
