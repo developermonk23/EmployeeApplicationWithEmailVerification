@@ -2,7 +2,7 @@
 
 Features of the Employee Management Application:
 User Features:
-Account Creation with Email Verification
+Account Creation with Email Verification 
 
 Users receive an email for verification upon creating an account.
 Clicking the verification link activates the account, allowing the user to log in. 
