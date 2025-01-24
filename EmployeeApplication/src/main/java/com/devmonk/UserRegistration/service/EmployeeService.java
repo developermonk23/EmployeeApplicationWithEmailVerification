@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
@@ -33,4 +34,6 @@ public interface EmployeeService {
 	List<WorkFromHomeRequest> getWFHRequestsForEmployee(Long employeeId);
 	WorkFromHomeRequest approveWFH(Long wfhRequestId, Long approverId);
 	WorkFromHomeRequest rejectWFH(Long wfhRequestId, Long approverId);
+	void saveProfilePicture(Long id, MultipartFile file) throws IOException;
+	String getProfilePicturePath(Employee employee);
 }

@@ -130,7 +130,7 @@
             // Simulate verification process (replace with actual server-side logic)
             const form = document.getElementById('twoFactorForm');
             
-            if (code === "123456") { // Example condition for successful verification
+            if (code.length === 6) { // Example condition for successful verification
                 form.submit(); // Submit the form to the server for redirection
             } else {
                 const messageElement = document.getElementById('message');

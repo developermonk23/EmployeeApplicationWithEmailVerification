@@ -36,6 +36,9 @@ public class Employee {
 
     @Column(name = "rating")
     private Integer rating;
+    
+    @Column(name = "profile_picture") 
+    private String profilePicture;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -137,4 +140,13 @@ public class Employee {
     public Employee(Long id) {
         this.id = id;
     }
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+    
 }

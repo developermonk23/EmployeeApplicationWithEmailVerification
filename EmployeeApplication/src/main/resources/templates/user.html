@@ -1,102 +1,180 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>User Page</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-image: url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #fff;
-        }
-        .container {
-            margin-top: 50px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        h1 {
-            color: #007bff;
-            text-align: center;
-            font-size: 2.5rem;
-        }
-        .btn-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .btn {
-            margin: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            transition: background-color 0.3s ease;
-        }
-        .btn i {
-            margin-right: 10px;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-        .success-message {
-            margin-top: 20px;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-        .logout-container {
-            margin-top: 20px;
-            text-align: left;
-            margin-left: 190px;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            font-size: 1.2rem;
-            padding: 10px 20px;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>User Page</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+body {
+	background-image:
+		url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	color: #fff;
+}
+
+.container {
+	margin-top: 50px;
+	background-color: rgba(255, 255, 255, 0.9);
+	border-radius: 10px;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	text-align: center;
+}
+
+h1 {
+	color: #007bff;
+	text-align: center;
+	font-size: 2.5rem;
+}
+
+.profile-picture {
+	margin: 20px auto;
+	position: relative;
+}
+
+.profile-picture img {
+	width: 150px;
+	height: 150px;
+	border-radius: 50%;
+	border: 5px solid #007bff;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.file-upload-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	margin-top: 15px;
+}
+
+.file-upload-container input[type="file"] {
+	flex: 1;
+	max-width: 200px;
+}
+
+.btn {
+	margin: 10px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	padding: 10px 20px;
+	font-size: 1.2rem;
+	transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+	background-color: #0056b3;
+}
+
+.btn-container {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.logout-container {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.btn-danger {
+	background-color: #dc3545;
+	border-color: #dc3545;
+	font-size: 1.2rem;
+	padding: 10px 20px;
+}
+
+.btn-danger:hover {
+	background-color: #c82333;
+	border-color: #bd2130;
+}
+
+.profile-picture {
+	margin: 20px auto;
+	position: relative;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%; /* Circular shape */
+	object-fit: cover; /* Ensures the image covers the entire circle */
+	border: 5px solid #fff; /* Border like the first page */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	/* Same shadow as the first page */
+	overflow: hidden; /* Prevents overflow from the circle */
+}
+
+.profile-picture img {
+	width: 100%; /* Ensures the image takes up the full width */
+	height: 100%; /* Ensures the image takes up the full height */
+	object-fit: cover;
+	/* Ensures the image maintains aspect ratio and covers the circle */
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome, User!</h1>
-        <hr>
-        <!-- Success message -->
-        <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
-        <div class="btn-container">
-            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/editDetails'}">
-                <i class="fas fa-user-edit"></i>Edit Personal Details
-            </a>
-            <a href="#" class="btn" th:href="@{'/user/' + ${employee.id} + '/viewReviews'}">
-                <i class="fas fa-star"></i>View Review and Ratings
-            </a>
-            <a href="#" class="btn" th:href="@{/leave/apply}">
-                <i class="far fa-calendar-plus"></i>Apply Leave
-            </a>
-            <a href="#" class="btn" th:href="@{/wfh/apply}">
-                <i class="fas fa-laptop-house"></i>Apply Work From Home
-            </a>
-        </div>
-    </div>
-    <div class="logout-container">
-        <a href="#" class="btn btn-danger" th:href="@{'/logout'}">
-            <i class="fas fa-sign-out-alt"></i>Logout
-        </a>
-    </div>
+	<div class="container">
+		<h1>
+			Welcome, <span th:text="${employee.firstName}">User</span>!
+		</h1>
+		<div class="profile-picture">
+			<!-- Display Profile Picture -->
+			<img
+				th:src="@{'/uploads/profile_pictures/' + ${employee.profilePicture}}"
+				alt="Profile Picture">
+		</div>
+
+		<!-- Upload Profile Picture Form -->
+		<form
+			th:action="@{'/user/' + ${employee.id} + '/uploadProfilePicture'}"
+			method="post" enctype="multipart/form-data">
+			<div class="file-upload-container">
+				<input type="file" id="profilePicture" name="profilePicture"
+					accept="image/*" class="form-control"
+					onchange="toggleUploadButton()">
+				<button type="submit" id="uploadButton" class="btn" disabled>Upload</button>
+			</div>
+		</form>
+
+		<hr>
+		<!-- Success message -->
+		<div th:if="${successMessage}" class="success-message"
+			th:text="${successMessage}"></div>
+
+		<!-- Action Buttons -->
+		<div class="btn-container">
+			<a href="#" class="btn"
+				th:href="@{'/user/' + ${employee.id} + '/editDetails'}"> <i
+				class="fas fa-user-edit"></i>Edit Personal Details
+			</a> <a href="#" class="btn"
+				th:href="@{'/user/' + ${employee.id} + '/viewReviews'}"> <i
+				class="fas fa-star"></i>View Review and Ratings
+			</a> <a href="#" class="btn" th:href="@{/leave/apply}"> <i
+				class="far fa-calendar-plus"></i>Apply Leave
+			</a> <a href="#" class="btn" th:href="@{/wfh/apply}"> <i
+				class="fas fa-laptop-house"></i>Apply Work From Home
+			</a>
+		</div>
+
+		<!-- Logout Button -->
+		<div class="logout-container">
+			<a href="#" class="btn btn-danger" th:href="@{'/logout'}"> <i
+				class="fas fa-sign-out-alt"></i>Logout
+			</a>
+		</div>
+	</div>
+
+	<script>
+        // Enable/disable the upload button based on file selection
+        function toggleUploadButton() {
+            const fileInput = document.getElementById('profilePicture');
+            const uploadButton = document.getElementById('uploadButton');
+            uploadButton.disabled = !fileInput.files.length; // Disable if no file selected
+        }
+    </script>
 </body>
 </html>
