@@ -1,66 +1,49 @@
-# EmployeeApplicationWithEmailVerification
+Key Features and Corresponding Technologies
+User Account Management
 
-Features of the Employee Management Application:
-User Features:
-Account Creation with Email Verification 
+Account Creation with Email Verification:
+Technologies: Spring Boot (Backend), SMTP (Email), MySQL (Database).
+Forgot Password Functionality:
+Technologies: Spring Boot, Thymeleaf, SMTP, MySQL.
+Employee Dashboard (Post-Login):
 
-Users receive an email for verification upon creating an account.
-Clicking the verification link activates the account, allowing the user to log in. 
-Forgot Password Functionality
-
-Users can reset their password by entering their email.
-A reset link is sent via email.
-Employee Dashboard (Post Login):
-
-Update Personal Details: Employees can update their personal information.
-View Reviews and Ratings: Employees can view feedback and ratings provided by their manager.
-Apply for Leave: Employees can submit leave requests.
-View balance leaves 
-Logout Option: Users can securely log out of their accounts.
+Update Personal Details:
+Technologies: Spring Boot, Thymeleaf, MySQL.
+View Reviews and Ratings:
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Apply for Leave and View Balance Leaves:
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Work-from-Home (WFH) Requests (Location-Based):
+Technologies: Java, Spring Boot, Geolocation APIs, MySQL.
+Profile Photo Upload:
+Technologies: Spring Boot, Thymeleaf, File Storage, MySQL.
+Language Change Option (Localization):
+Technologies: Thymeleaf, Spring Internationalization (i18n).
+Two-Factor Authentication (2FA) via Email Code:
+Technologies: Spring Security, SMTP.
+Logout Option:
+Technologies: Spring Security.
 Admin/Manager Features:
-Employee List Page:
 
-Displays all employees in a paginated format.
-Includes a search bar for finding employees quickly.
-Export to CSV: Exports all employee details to a CSV file.
-Add New Employee: Allows admins to add new employees to the system.
-Employee Details Management:
+Employee List Management (Paginated):
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Search Employee Details:
+Technologies: Thymeleaf, Spring Boot, MySQL.
+Export Employee Details to CSV:
+Technologies: CSV Export Libraries, Spring Boot.
+Add, Edit, and Delete Employees:
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Assign Ratings and Reviews:
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Leave Management (Approve/Reject Leave Requests):
+Technologies: Spring Boot, Thymeleaf, MySQL.
+Monitor Activity Logs:
+Technologies: Spring Boot, MySQL, Logging Libraries (Logback or SLF4J).
+Technologies Summary:
 
-Admins can edit employee details.
-Admins can assign ratings and provide reviews.
-Admins can delete an employee record.
-Leave Management:
-
-View Leave Requests Tab: Admins can view, approve, or reject employee leave requests.
-Activity Status Tab:
-
-Admins can monitor activities performed in an employee's account.
-Technologies Used:
-Backend Development:
-
-Java
-Spring Boot
-Frontend Development:
-
-Thymeleaf
-HTML
-CSS
-JavaScript
-Database:
-
-MySQL (or similar RDBMS for storing employee and admin data)
-Email Functionality:
-
-SMTP (for sending email notifications)
-File Export:
-
-CSV generation for exporting employee details
-Other Tools and Features:
-
-Pagination for employee lists
-Search functionality
-Authentication and authorization with Spring Security
-
-Work from home feature, wfh can only be applied if location is on.
-
-two factor auuthentication (code via mail)
+Backend: Java, Spring Boot.
+Frontend: Thymeleaf, HTML, CSS, JavaScript.
+Database: MySQL (RDBMS).
+Email: SMTP.
+File Export: CSV Generation Libraries.
+Authentication/Authorization: Spring Security.
