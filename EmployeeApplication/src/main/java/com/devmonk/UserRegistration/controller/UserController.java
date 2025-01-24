@@ -1,5 +1,6 @@
 package com.devmonk.UserRegistration.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -137,7 +139,7 @@ public class UserController {
             
         }
 
-        return "redirect:/2fa?error"; // Redirect back to 2FA page with an error
+          return "redirect:/2fa?error"; // Redirect back to 2FA page with an error
     }
     
     //populate user page
@@ -153,7 +155,9 @@ public class UserController {
         String username = principal.getName();
         User user = userRepository.findByEmail(username);
         Employee employee = user.getEmployee();
+        String profilePicturePath = employeeService.getProfilePicturePath(employee);
         model.addAttribute("employee", employee);
+        model.addAttribute("profilePicturePath", profilePicturePath); 
 
         return "user"; // Render user page
     }
@@ -466,6 +470,20 @@ public class UserController {
     	User user = userRepository.findByEmail(username);
         employeeService.rejectWFH(wfhRequestId, user.getId());
         return ResponseEntity.ok("WFH request rejected successfully.");
+    }
+    
+ // Upload profile picture
+    @PostMapping("user/{id}/uploadProfilePicture")
+    public String uploadProfilePicture(@PathVariable Long id,
+                                        @RequestParam("profilePicture") MultipartFile file,
+                                        Model model) {
+        try {
+            employeeService.saveProfilePicture(id, file);
+            model.addAttribute("successMessage", "Profile picture uploaded successfully!");
+        } catch (IOException e) {
+            model.addAttribute("errorMessage", "Failed to upload profile picture. Please try again.");
+        }
+        return "redirect:/user/" + id;
     }
 
 }

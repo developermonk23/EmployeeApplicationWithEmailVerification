@@ -18,23 +18,72 @@
     }
 
     /* Container Styling */
-    .container {
-        margin-top: 50px;
-        background-color: rgba(255, 255, 255, 0.95); /* Slightly opaque for depth */
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
-        padding: 40px;
-    }
+   .container {
+    margin-top: 50px;
+    background-color: rgba(255, 255, 255, 0.95); /* Slightly opaque for depth */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+    padding: 40px;
+}
 
-    /* Title Styling */
-    h1 {
-        color: #0056b3; /* Slightly darker blue */
-        margin-bottom: 25px;
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-    }
+/* Title Styling */
+.header-section {
+    width: 100%;
+    display: flex;
+    justify-content: space-between; /* Aligns the title to the left and the profile picture to the right */
+    align-items: center; /* Vertically aligns content */
+}
 
+h1 {
+    color: #0056b3;
+    font-size: 2rem;
+    font-weight: bold;
+    flex-grow: 1; /* Ensures the title takes up available space */
+    text-align: left; /* Aligns the title to the left */
+}
+
+/* Profile Picture Container */
+.profile-picture-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Circular shape */
+    object-fit: cover; /* Ensures the image covers the entire circle */
+    border: 5px solid #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Prevents the image from overflowing the circular shape */
+    margin-left: 20px;
+}
+
+.profile-picture-container img {
+    width: 100%;  /* Ensures the image takes up the full width */
+    height: 100%; /* Ensures the image takes up the full height */
+    object-fit: cover; /* Ensures the image maintains aspect ratio and covers the circle */
+}
+
+
+
+
+.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.d-flex img {
+    max-width: 100%;
+    height: auto;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+h1 {
+    color: #0056b3; 
+    font-size: 2rem;
+    font-weight: bold;
+}
+	
     /* Form Fields */
     .form-group label {
         font-weight: 600;
@@ -217,7 +266,15 @@
         <i class="fas fa-arrow-left back-icon"></i> Back to Employee List
     </a>
 
-    <h1 class="text-center" th:text="'Details of ' + ${employee.firstName} + ' ' + ${employee.lastName}"></h1>
+    <div class="header-section d-flex justify-content-center align-items-center mb-3">
+        <!-- Title Section (Centered) -->
+        <h1 class="text-center" th:text="'Details of ' + ${employee.firstName} + ' ' + ${employee.lastName}"></h1>
+
+        <!-- Profile Picture -->
+        <div class="profile-picture-container ml-3">
+            <img th:src="@{'/uploads/profile_pictures/' + ${employee.profilePicture}}" alt="Profile Picture">
+        </div>
+    </div>
 
     <!-- Button Section -->
     <div class="d-flex justify-content-end mb-3">

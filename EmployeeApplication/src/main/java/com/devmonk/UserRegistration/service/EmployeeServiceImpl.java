@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
 import com.devmonk.UserRegistration.model.Employee;
@@ -36,6 +37,10 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -57,6 +62,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Autowired
     private WorkFromHomeRequestRepository wfhRequestRepository;
+    
+    private final String uploadDir = "uploads/profile_pictures/";
 
     @Override
     public List<Employee> getAllEmployees() {
@@ -258,5 +265,40 @@ public class EmployeeServiceImpl implements EmployeeService {
         request.setApprover(new User(approverId));
         return wfhRequestRepository.save(request);
     }
+    
+
+    public Employee getEmployeeById(Long id) {
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found"));
+    }
+
+    @Override
+    public String getProfilePicturePath(Employee employee) {
+        String profilePicture = employee.getProfilePicture();
+        if (profilePicture != null && !profilePicture.isEmpty()) {
+            return "/uploads/profile_pictures/" + profilePicture; // This matches the ResourceHandler URL
+        }
+        return "/uploads/profile_pictures/default.jpg"; // Default image
+    }
+
+
+	@Override
+	public void saveProfilePicture(Long id, MultipartFile file) throws IOException {
+		Employee employee = getEmployeeById(id);
+
+        // Ensure the upload directory exists
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        // Save the file to the local filesystem
+        String fileName = id + "_" + file.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+        Files.write(filePath, file.getBytes());
+
+        // Update the employee's profile picture field
+        employee.setProfilePicture(fileName);
+        employeeRepository.save(employee);
+	}
 
 }
