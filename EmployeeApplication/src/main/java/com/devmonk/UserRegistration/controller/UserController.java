@@ -50,7 +50,7 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
+	 
 	@Autowired
 	private  EmployeeService employeeService;
 	
