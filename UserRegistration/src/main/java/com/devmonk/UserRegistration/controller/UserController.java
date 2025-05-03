@@ -48,7 +48,7 @@ public class UserController {
 	@Autowired
 	UserDetailsService userDetailsService;
 	
-	@Autowired
+	@Autowired 
 	private UserService userService;
 	 
 	@Autowired
