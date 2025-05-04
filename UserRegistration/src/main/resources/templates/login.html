@@ -4,219 +4,310 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Form</title>
-    <link rel="stylesheet" th:href="@{../css/styles.css}">
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <style>
-        /* General Reset */
-        * {
+        :root {
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            --glass-bg: rgba(255,255,255,0.18);
+            --glass-border: rgba(255,255,255,0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        }
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
         }
-
         body {
-    background: url('https://images.pexels.com/photos/2768398/pexels-photo-2768398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center fixed;
-    background-size: cover;
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
-        /* Header styling */
+            min-height: 100vh;
+            background: var(--background);
+            font-family: 'Inter', Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        /* Flex wrapper to center content */
+        .center-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+        }
+        /* Animated floating shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0.5;
+            z-index: 0;
+            animation: float 12s ease-in-out infinite alternate;
+        }
+        .shape1 { width: 220px; height: 220px; background: var(--primary); top: 5%; left: 5%; animation-delay: 0s;}
+        .shape2 { width: 160px; height: 160px; background: var(--secondary); top: 70%; left: 80%; animation-delay: 2s;}
+        .shape3 { width: 120px; height: 120px; background: var(--accent); top: 60%; left: 10%; animation-delay: 4s;}
+        @keyframes float {
+            0% { transform: translateY(0) scale(1);}
+            100% { transform: translateY(-40px) scale(1.1);}
+        }
+        /* Header */
         .header {
-        background: linear-gradient(to right, #007bff, #00d4ff);
-        color: #fff;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-        animation: slideDown 0.8s ease-in-out;
-    }
-	df-messenger {
-	  --df-messenger-bot-message: #007bff;
-	  --df-messenger-button-titlebar-color: #007bff;
-	  --df-messenger-send-icon: #ffffff;
-	  --df-messenger-user-message: #00d4ff;
-	  position: fixed;
-	  bottom: 20px;
-	  right: 20px;
-	  z-index: 9999;
-	}
-
-    /* Header Title Styling */
-    .header h1 {
-        font-size: 28px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
-        margin: 0;
-    }
-
-    /* Language Selector Styling */
-    .language-selector {
-        position: relative;
-    }
-
-    .language-selector select {
-        background: #fff;
-        color: #007bff;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 20px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        outline: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s ease;
-    }
-
-    .language-selector select:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Header Responsive Design */
-    @media (max-width: 768px) {
+            width: 100%;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 32px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header .logo-circle {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.18);
+        }
         .header h1 {
-            font-size: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22223b;
+            letter-spacing: 1px;
+            margin: 0;
         }
-
+        .language-selector {
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
         .language-selector select {
-            font-size: 14px;
-            padding: 6px 10px;
+            background: #fff;
+            color: var(--primary);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+            transition: box-shadow 0.3s, transform 0.3s;
+            max-width: 140px;
         }
-    }
-
-        /* Container styling */
+        .language-selector select:hover {
+            box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+            transform: scale(1.05);
+        }
+        /* Glassmorphism Login Card */
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            background: var(--glass-bg);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            padding: 48px 36px 36px 36px;
             max-width: 400px;
-            margin-top: 80px;
-            animation: fadeIn 0.8s ease-in-out;
+            width: 100%;
+            margin-top: 100px;
+            backdrop-filter: blur(16px);
+            animation: fadeIn 1s cubic-bezier(.4,0,.2,1);
+            box-sizing: border-box;
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
         }
-
         h2 {
             text-align: center;
-            margin-bottom: 20px;
-            color: #007bff;
-            font-size: 28px;
+            margin-bottom: 28px;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
-
         label {
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #22223b;
+            margin-bottom: 6px;
+            display: block;
         }
-
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-top: 8px;
-            transition: all 0.3s ease;
+            padding: 14px 18px;
+            border: 1.5px solid #e0e7ff;
+            border-radius: 14px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.7);
+            margin-top: 6px;
+            transition: border 0.3s, box-shadow 0.3s;
+            outline: none;
+            box-sizing: border-box;
         }
-
         input[type="email"]:focus,
         input[type="password"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px #6366f133;
         }
-
         input[type="submit"] {
-            background: linear-gradient(to right, #007bff, #00d4ff);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: #fff;
             border: none;
-            padding: 12px;
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
             width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+            transition: background 0.3s, transform 0.2s;
         }
-
         input[type="submit"]:hover {
-            background: linear-gradient(to right, #0056b3, #00a3cc);
-            transform: translateY(-2px);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: translateY(-2px) scale(1.02);
         }
-
         .message {
-            color: #dc3545;
-            margin-bottom: 20px;
+            color: #ef4444;
+            margin-bottom: 18px;
             text-align: center;
+            font-weight: 600;
         }
-
         .forgot-password-link,
         .btn {
             display: block;
             text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #007bff;
+            margin-top: 18px;
+            font-size: 1rem;
+            color: var(--primary);
             text-decoration: none;
-            transition: color 0.3s ease;
+            font-weight: 600;
+            transition: color 0.3s;
         }
-
         .forgot-password-link:hover,
         .btn:hover {
+            color: var(--secondary);
             text-decoration: underline;
-            color: #0056b3;
         }
-
         .btn {
-            margin-top: 20px;
-            padding: 10px 0;
-            background: #007bff;
+            margin-top: 24px;
+            padding: 12px 0;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 14px;
             cursor: pointer;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(244,114,182,0.10);
+            transition: background 0.3s, transform 0.2s;
         }
-
         .btn:hover {
-            background: #0056b3;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transform: translateY(-2px) scale(1.02);
+        }
+        /* Dialogflow Messenger Modern Styling */
+        df-messenger {
+            --df-messenger-bot-message: var(--primary);
+            --df-messenger-button-titlebar-color: var(--primary);
+            --df-messenger-send-icon: #fff;
+            --df-messenger-user-message: var(--secondary);
+            --df-messenger-font-family: 'Inter', Arial, sans-serif;
+            --df-messenger-chat-background-color: #f7f9fa;
+            --df-messenger-input-box-background: #fff;
+            --df-messenger-input-box-border-radius: 24px;
+            --df-messenger-input-box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            --df-messenger-minimized-chat-close-icon-color: var(--primary);
+            --df-messenger-titlebar-font-color: #fff;
+            --df-messenger-titlebar-font-size: 18px;
+            --df-messenger-titlebar-font-weight: 600;
+            --df-messenger-titlebar-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 9999;
+            font-family: 'Inter', Arial, sans-serif;
+            box-shadow: 0 8px 32px rgba(99,102,241,0.18);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        /* Notification badge for the chat icon */
+        .df-messenger-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ef4444;
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            pointer-events: none;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 28px 4vw 24px 4vw;
+                margin-top: 80px;
+            }
+            .header {
+                padding: 12px 6px;
+            }
+            df-messenger {
+                right: 8px;
+                bottom: 8px;
+            }
+            .language-selector select {
+                font-size: 0.9rem;
+                padding: 6px 10px;
+                max-width: 90px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Language Selector -->
+    <!-- Animated background shapes -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+
+    <!-- Header with Logo and Language Selector -->
     <div class="header">
-        <h1 th:text="#{login.title}">Login Page</h1>
+        <div class="logo">
+            <div class="logo-circle">C</div>
+            <h1 th:text="#{login.title}">Login Page</h1>
+        </div>
         <div class="language-selector">
             <form th:action="@{/change-language}" method="get">
                 <select name="lang" onchange="this.form.submit()">
@@ -228,41 +319,69 @@
         </div>
     </div>
 
-    <!-- Main Login Container -->
-    <div class="container">
-        <div class="message" th:if="${param.error}">
-            Invalid Username or Password
-        </div>
-        <div class="message" th:if="${param.logout}">
-            Logout Successfully
-        </div>
-
-        <h2 th:text="#{login.titlee}">Login</h2>
-        <form th:action="@{/login}" method="post">
-            <div class="form-group">
-                <label for="username" th:text="#{login.email}">Email:</label>
-                <input type="email" id="username" name="username" placeholder="Enter your email" required>
+    <div class="center-wrapper">
+        <!-- Main Login Container -->
+        <div class="container">
+            <div class="message" th:if="${param.error}">
+                Invalid Username or Password
+            </div>
+            <div class="message" th:if="${param.logout}">
+                Logout Successfully
             </div>
 
-            <div class="form-group">
-                <label for="password" th:text="#{login.password}">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-            <input type="submit" value="Login" th:value="#{login.button}">
-        </form>
-        
-        <!-- Forgot Password link -->
-        <a class="forgot-password-link" th:href="@{/password-recovery}" th:text="#{login.forgotPassword}">Forgot Password?</a>
-        
-        <!-- Create Account button -->
-        <a class="btn" th:href="@{/registration}" th:text="#{login.createAccount}">Create Account</a>
+            <h2 th:text="#{login.titlee}">Login</h2>
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label for="username" th:text="#{login.email}">Email:</label>
+                    <input type="email" id="username" name="username" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" th:text="#{login.password}">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <input type="submit" value="Login" th:value="#{login.button}">
+            </form>
+            <!-- Forgot Password link -->
+            <a class="forgot-password-link" th:href="@{/password-recovery}" th:text="#{login.forgotPassword}">Forgot Password?</a>
+            <!-- Create Account button -->
+            <a class="btn" th:href="@{/registration}" th:text="#{login.createAccount}">Create Account</a>
+        </div>
     </div>
+
+    <!-- Dialogflow Messenger Chatbot -->
     <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-	<df-messenger
-	  intent="WELCOME"
-	  chat-title="Chatbot"
-	  agent-id="568d2548-f0b9-474a-ae10-99eab42a56d2"
-	  language-code="en"
-	></df-messenger>
+    <df-messenger
+        intent="WELCOME"
+        chat-title="Chatbot"
+        agent-id="568d2548-f0b9-474a-ae10-99eab42a56d2"
+        language-code="en"
+    ></df-messenger>
+
+    <!-- Notification badge script -->
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Wait for the Dialogflow Messenger to load
+        const interval = setInterval(() => {
+            const dfMessenger = document.querySelector('df-messenger');
+            if (dfMessenger && dfMessenger.shadowRoot) {
+                const chatIcon = dfMessenger.shadowRoot.querySelector('df-messenger-chat-icon');
+                if (chatIcon && chatIcon.shadowRoot && !chatIcon.shadowRoot.querySelector('.df-messenger-badge')) {
+                    // Create badge
+                    const badge = document.createElement('div');
+                    badge.className = 'df-messenger-badge';
+                    badge.textContent = '1'; // Or use a dot: badge.textContent = '';
+                    // Attach badge to the chat icon
+                    chatIcon.shadowRoot.appendChild(badge);
+
+                    // Remove badge when chat is opened
+                    chatIcon.addEventListener('click', () => {
+                        badge.remove();
+                    });
+                    clearInterval(interval);
+                }
+            }
+        }, 300);
+    });
+    </script>
 </body>
 </html>
