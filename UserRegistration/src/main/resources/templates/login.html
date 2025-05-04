@@ -41,6 +41,16 @@
         z-index: 1000;
         animation: slideDown 0.8s ease-in-out;
     }
+	df-messenger {
+	  --df-messenger-bot-message: #007bff;
+	  --df-messenger-button-titlebar-color: #007bff;
+	  --df-messenger-send-icon: #ffffff;
+	  --df-messenger-user-message: #00d4ff;
+	  position: fixed;
+	  bottom: 20px;
+	  right: 20px;
+	  z-index: 9999;
+	}
 
     /* Header Title Styling */
     .header h1 {
@@ -247,5 +257,12 @@
         <!-- Create Account button -->
         <a class="btn" th:href="@{/registration}" th:text="#{login.createAccount}">Create Account</a>
     </div>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+	<df-messenger
+	  intent="WELCOME"
+	  chat-title="Chatbot"
+	  agent-id="568d2548-f0b9-474a-ae10-99eab42a56d2"
+	  language-code="en"
+	></df-messenger>
 </body>
 </html>
