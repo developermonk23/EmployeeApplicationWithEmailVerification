@@ -4,96 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two-Factor Authentication</title>
-    <!-- Import Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(to bottom right, #007bff, #00d4ff);
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        :root {
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            --glass-bg: rgba(255,255,255,0.18);
+            --glass-border: rgba(255,255,255,0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        }
+        html, body {
+            height: 100%;
             margin: 0;
-            font-family: 'Poppins', sans-serif; /* Apply stylish font */
+            padding: 0;
         }
-
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            font-family: 'Inter', Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .center-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            position: relative;
+        }
+        /* Animated floating shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0.5;
+            z-index: 0;
+            animation: float 12s ease-in-out infinite alternate;
+        }
+        .shape1 { width: 220px; height: 220px; background: var(--primary); top: 5%; left: 5%; animation-delay: 0s;}
+        .shape2 { width: 160px; height: 160px; background: var(--secondary); top: 70%; left: 80%; animation-delay: 2s;}
+        .shape3 { width: 120px; height: 120px; background: var(--accent); top: 60%; left: 10%; animation-delay: 4s;}
+        @keyframes float {
+            0% { transform: translateY(0) scale(1);}
+            100% { transform: translateY(-40px) scale(1.1);}
+        }
+        /* Glassmorphism Card */
         .container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: var(--glass-bg);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            padding: 48px 36px 36px 36px;
             max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+            backdrop-filter: blur(16px);
+            animation: fadeIn 1s cubic-bezier(.4,0,.2,1);
+            box-sizing: border-box;
             text-align: center;
+            z-index: 2;
         }
-
-        .container h2 {
-            margin-bottom: 20px;
-            color: #007bff; /* Modern blue color */
-            font-size: 24px; /* Larger font size */
-            font-weight: 600; /* Bold heading */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
         }
-
+        h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
         .email-check {
             margin-top: 10px;
-            font-size: 16px; /* Slightly larger text */
-            color: #555; /* Neutral gray color for readability */
+            font-size: 1rem;
+            color: #555;
         }
-
         .pin-container {
-            display: flex; 
-            justify-content: space-between; 
-            gap: 10px; 
-            margin-top: 20px; /* Add space above the input boxes */
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 24px;
+            margin-bottom: 10px;
         }
-
         .pin-input {
-            width: 50px;
-            height: 50px; 
-            padding: 0; 
-            border-radius: 5px;
-            border: 2px solid #ddd;
-            font-size: 18px; 
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            border: 1.5px solid #e0e7ff;
+            font-size: 1.3rem;
             text-align: center;
-            transition: border-color 0.3s; 
+            background: rgba(255,255,255,0.7);
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
         }
-
         .pin-input:focus {
-            border-color: #007bff; 
-            outline: none; 
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px #6366f133;
         }
-
         .message {
             margin-top: 10px;
-            font-weight: bold; 
+            font-weight: bold;
+            font-size: 1rem;
         }
-
         .success {
-            color: green; /* Green color for success messages */
+            color: green;
         }
-
         .error {
-            color: #dc3545; /* Red color for error messages */
+            color: #dc3545;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 28px 4vw 24px 4vw;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .pin-input {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>2FA Verification</h2>
-        <div class="email-check">Enter the code sent to your email.</div>
-        <form th:action="@{/verify-2fa}" method="post" id="twoFactorForm">
-            <div class="pin-container">
-                <input type="text" name="digit1" id="digit1" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit2')" onkeydown="handleKeyDown(event, this, 'digit1')">
-                <input type="text" name="digit2" id="digit2" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit3')" onkeydown="handleKeyDown(event, this, 'digit2')">
-                <input type="text" name="digit3" id="digit3" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit4')" onkeydown="handleKeyDown(event, this, 'digit3')">
-                <input type="text" name="digit4" id="digit4" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit5')" onkeydown="handleKeyDown(event, this, 'digit4')">
-                <input type="text" name="digit5" id="digit5" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit6')" onkeydown="handleKeyDown(event, this, 'digit5')">
-                <input type="text" name="digit6" id="digit6" class="pin-input" maxlength="1" required oninput="verifyCode()" onkeydown="handleKeyDown(event, this, 'digit6')">
-                <!-- Hidden field to store combined code -->
-                <input type="hidden" name="code" id="code">
-            </div>
-        </form>
-        <div class="message" id="message"></div> <!-- Message display area -->
+    <!-- Animated background shapes -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+
+    <div class="center-wrapper">
+        <div class="container">
+            <h2>2FA Verification</h2>
+            <div class="email-check">Enter the code sent to your email.</div>
+            <form th:action="@{/verify-2fa}" method="post" id="twoFactorForm">
+                <div class="pin-container">
+                    <input type="text" name="digit1" id="digit1" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit2')" onkeydown="handleKeyDown(event, this, 'digit1')">
+                    <input type="text" name="digit2" id="digit2" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit3')" onkeydown="handleKeyDown(event, this, 'digit2')">
+                    <input type="text" name="digit3" id="digit3" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit4')" onkeydown="handleKeyDown(event, this, 'digit3')">
+                    <input type="text" name="digit4" id="digit4" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit5')" onkeydown="handleKeyDown(event, this, 'digit4')">
+                    <input type="text" name="digit5" id="digit5" class="pin-input" maxlength="1" required oninput="moveToNext(this, 'digit6')" onkeydown="handleKeyDown(event, this, 'digit5')">
+                    <input type="text" name="digit6" id="digit6" class="pin-input" maxlength="1" required oninput="verifyCode()" onkeydown="handleKeyDown(event, this, 'digit6')">
+                    <input type="hidden" name="code" id="code">
+                </div>
+            </form>
+            <div class="message" id="message"></div>
+        </div>
     </div>
 
     <script>
@@ -102,7 +165,6 @@
                 if (nextInputId) {
                     document.getElementById(nextInputId).focus();
                 }
-                // Automatically verify when the last digit is entered
                 if (nextInputId === '') {
                     verifyCode();
                 }
@@ -110,9 +172,7 @@
         }
 
         function handleKeyDown(event, currentInput, currentInputId) {
-            // Check if backspace key is pressed
             if (event.key === "Backspace") {
-                // If the current input is empty and it's not the first input
                 if (currentInput.value === "" && currentInputId !== "digit1") {
                     const previousInputId = "digit" + (parseInt(currentInputId.replace("digit", "")) - 1);
                     document.getElementById(previousInputId).focus();
@@ -121,21 +181,20 @@
         }
 
         function verifyCode() {
-            const code = Array.from({ length: 6 }, (_, i) => 
+            const code = Array.from({ length: 6 }, (_, i) =>
                 document.getElementById(`digit${i + 1}`).value
             ).join('');
-            
-            document.getElementById('code').value = code; // Set combined value in hidden field
-            
-            // Simulate verification process (replace with actual server-side logic)
+
+            document.getElementById('code').value = code;
+
             const form = document.getElementById('twoFactorForm');
-            
-            if (code.length === 6) { // Example condition for successful verification
-                form.submit(); // Submit the form to the server for redirection
+
+            if (code.length === 6) {
+                form.submit();
             } else {
                 const messageElement = document.getElementById('message');
                 messageElement.innerText = "Invalid 2FA Code. Please try again.";
-                messageElement.className = "message error"; // Set error class
+                messageElement.className = "message error";
                 clearInputs();
             }
         }
@@ -143,7 +202,7 @@
         function clearInputs() {
             for (let i = 1; i <= 6; i++) {
                 document.getElementById(`digit${i}`).value = '';
-                if (i === 1) document.getElementById(`digit${i}`).focus(); // Focus first input
+                if (i === 1) document.getElementById(`digit${i}`).focus();
             }
         }
     </script>
