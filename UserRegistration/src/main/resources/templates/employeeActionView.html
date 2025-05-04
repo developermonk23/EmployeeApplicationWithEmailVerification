@@ -4,260 +4,212 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Details</title>
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-    /* Background */
-    body {
-        background-image: url('https://images.pexels.com/photos/1631677/pexels-photo-1631677.jpeg?auto=compress&cs=tinysrgb&w=600');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        font-family: 'Roboto', Arial, sans-serif;
-        color: #333;
+    :root {
+        --primary: #6366f1;
+        --secondary: #06b6d4;
+        --accent: #f472b6;
+        --background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+        --glass-bg: rgba(255,255,255,0.18);
+        --glass-border: rgba(255,255,255,0.4);
+        --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
     }
-
-    /* Container Styling */
-   .container {
-    margin-top: 50px;
-    background-color: rgba(255, 255, 255, 0.95); /* Slightly opaque for depth */
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
-    padding: 40px;
-}
-
-/* Title Styling */
-.header-section {
-    width: 100%;
-    display: flex;
-    justify-content: space-between; /* Aligns the title to the left and the profile picture to the right */
-    align-items: center; /* Vertically aligns content */
-}
-
-h1 {
-    color: #0056b3;
-    font-size: 2rem;
-    font-weight: bold;
-    flex-grow: 1; /* Ensures the title takes up available space */
-    text-align: left; /* Aligns the title to the left */
-}
-
-/* Profile Picture Container */
-.profile-picture-container {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%; /* Circular shape */
-    object-fit: cover; /* Ensures the image covers the entire circle */
-    border: 5px solid #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Prevents the image from overflowing the circular shape */
-    margin-left: 20px;
-}
-
-.profile-picture-container img {
-    width: 100%;  /* Ensures the image takes up the full width */
-    height: 100%; /* Ensures the image takes up the full height */
-    object-fit: cover; /* Ensures the image maintains aspect ratio and covers the circle */
-}
-
-
-
-
-.d-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.d-flex img {
-    max-width: 100%;
-    height: auto;
-}
-
-.mb-3 {
-    margin-bottom: 1rem;
-}
-
-h1 {
-    color: #0056b3; 
-    font-size: 2rem;
-    font-weight: bold;
-}
-	
-    /* Form Fields */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        min-height: 100vh;
+        background: var(--background);
+        font-family: 'Inter', Arial, sans-serif;
+        color: #22223b;
+        overflow-x: hidden;
+        position: relative;
+    }
+    .container {
+        margin-top: 50px;
+        background: var(--glass-bg);
+        border: 1.5px solid var(--glass-border);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        padding: 40px;
+        backdrop-filter: blur(16px);
+        max-width: 900px;
+    }
+    .header-section {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    h1 {
+        color: var(--primary);
+        font-size: 2rem;
+        font-weight: bold;
+        flex-grow: 1;
+        text-align: left;
+        letter-spacing: 1px;
+    }
+    .profile-picture-container {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #fff;
+        box-shadow: 0 4px 20px rgba(99,102,241,0.18);
+        overflow: hidden;
+        margin-left: 20px;
+        background: #f7f9fa;
+    }
+    .profile-picture-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
     .form-group label {
         font-weight: 600;
         color: #555;
     }
-
     .form-group input, .form-group textarea, .form-group select {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
+        background-color: rgba(255,255,255,0.7);
+        border: 1.5px solid #e0e7ff;
         border-radius: 8px;
         padding: 10px 15px;
         font-size: 1rem;
-        transition: all 0.3s ease;
+        transition: border 0.3s, box-shadow 0.3s;
     }
-
     .form-group input:focus, 
     .form-group textarea:focus, 
     .form-group select:focus {
         outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        border-color: var(--primary);
+        box-shadow: 0 0 8px #6366f133;
     }
-
-    /* Buttons */
     .btn-primary, .btn-danger, .btn-success, .btn-info {
         border: none;
         font-size: 0.9rem;
         font-weight: bold;
         padding: 10px 20px;
-        border-radius: 50px; /* Rounded buttons */
-        transition: transform 0.2s, box-shadow 0.2s;
+        border-radius: 50px;
+        transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
         text-transform: uppercase;
+        box-shadow: 0 2px 8px rgba(99,102,241,0.12);
     }
-
     .btn-primary {
         background: linear-gradient(45deg, #6a11cb, #2575fc);
         color: #fff;
     }
-
     .btn-primary:hover {
         transform: translateY(-3px);
+        background: linear-gradient(45deg, #2575fc, #6a11cb);
         box-shadow: 0 8px 15px rgba(38, 143, 255, 0.3);
     }
-
     .btn-danger {
         background: linear-gradient(45deg, #ff5f6d, #ffc371);
         color: #fff;
     }
-
     .btn-danger:hover {
         transform: translateY(-3px);
+        background: linear-gradient(45deg, #ffc371, #ff5f6d);
         box-shadow: 0 8px 15px rgba(255, 94, 107, 0.3);
     }
-
     .btn-success {
         background: linear-gradient(45deg, #11998e, #38ef7d);
         color: #fff;
     }
-
     .btn-info {
         background: linear-gradient(45deg, #2193b0, #6dd5ed);
         color: #fff;
     }
-
     .btn-submit {
-        background-color: #0056b3;
+        background: linear-gradient(90deg, #6366f1, #06b6d4);
         color: #fff;
         border-radius: 50px;
         padding: 12px 24px;
         font-size: 1rem;
         font-weight: bold;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        margin-top: 16px;
+        transition: background 0.3s, transform 0.2s;
     }
-
     .btn-submit:hover {
-        background-color: #003d80;
+        background: linear-gradient(90deg, #06b6d4, #6366f1);
         transform: translateY(-2px);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
-
-    /* Back Button */
     .back-button {
-        background-color: #6c757d;
+        background: linear-gradient(90deg, #6c757d, #a1a1aa);
         color: #fff;
         border: none;
-        padding: 10px 20px;
+        padding: 10px 24px;
         border-radius: 50px;
         cursor: pointer;
         font-size: 0.9rem;
-        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-weight: 600;
+        transition: background 0.3s, transform 0.2s;
+        margin-bottom: 18px;
+        text-decoration: none;
     }
-
     .back-button:hover {
-        background-color: #5a6268;
+        background: linear-gradient(90deg, #a1a1aa, #6c757d);
         transform: translateY(-3px);
     }
-
-    /* Review Section */
     .review-section {
-        background-color: #f9f9f9;
+        background-color: rgba(255,255,255,0.7);
         border-radius: 15px;
         padding: 20px;
         margin-top: 30px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 15px rgba(99,102,241,0.08);
     }
-
     .review-section h2 {
         color: #0056b3;
         margin-bottom: 15px;
         font-size: 1.5rem;
         text-align: center;
     }
-
-    /* Badges */
     .badge {
         font-size: 0.8rem;
         font-weight: bold;
         padding: 0.5rem 0.8rem;
         border-radius: 50px;
         text-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+        animation: badge-pulse 1.5s infinite;
     }
-
     .badge-danger {
         background: #e63946;
         color: #fff;
     }
-
     .badge-warning {
         background: #f4a261;
         color: #fff;
     }
-
     .badge i {
         margin: 0;
         vertical-align: middle;
     }
-
-    /* Layout Adjustments */
+    @keyframes badge-pulse {
+        0%, 100% { transform: scale(1);}
+        50% { transform: scale(1.2);}
+    }
     .d-flex {
         align-items: center;
         gap: 10px;
     }
-
-    .position-relative {
-        position: relative;
+    .position-relative { position: relative; }
+    .position-absolute { position: absolute; }
+    .top-0 { top: 0; }
+    .start-100 { right: -10px; }
+    @media (max-width: 800px) {
+        .container { padding: 20px; }
+        .profile-picture-container { width: 80px; height: 80px; }
+        h1 { font-size: 1.3rem; }
     }
-
-    .position-absolute {
-        position: absolute;
-    }
-
-    .top-0 {
-        top: 0;
-    }
-
-    .start-100 {
-        right: -10px;
-    }
-
-    /* Animation */
-    @keyframes badge-pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.2);
-        }
-    }
-
-    .badge-danger, .badge-warning {
-        animation: badge-pulse 1.5s infinite;
-    }
-</style>
-
+    </style>
 </head>
 <body>
 
@@ -267,10 +219,7 @@ h1 {
     </a>
 
     <div class="header-section d-flex justify-content-center align-items-center mb-3">
-        <!-- Title Section (Centered) -->
         <h1 class="text-center" th:text="'Details of ' + ${employee.firstName} + ' ' + ${employee.lastName}"></h1>
-
-        <!-- Profile Picture -->
         <div class="profile-picture-container ml-3">
             <img th:src="@{'/uploads/profile_pictures/' + ${employee.profilePicture}}" alt="Profile Picture">
         </div>
@@ -278,36 +227,27 @@ h1 {
 
     <!-- Button Section -->
     <div class="d-flex justify-content-end mb-3">
-    <!-- Delete Button -->
-    <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger enhanced-btn mr-2">
-        <i class="fas fa-trash-alt"></i> Delete
-    </a>
-
-    <!-- Activity Status Button -->
-    <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="btn btn-success enhanced-btn mr-2">
-        <i class="fas fa-list"></i> Activity Status
-    </a>
-
-    <!-- View Leave Requests Button -->
-    <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary enhanced-btn position-relative mr-2">
-        <i class="fas fa-calendar-alt"></i> Leave Requests
-        <span th:if="${hasPendingLeaveRequests}" 
-              class="badge badge-danger position-absolute top-0 start-100 translate-middle">
-            <i class="fas fa-exclamation-circle"></i>
-        </span>
-    </a>
-
-    <!-- View WFH Requests Button -->
-    <a th:href="@{/wfh/view/{id}(id=${employee.id})}" class="btn btn-info enhanced-btn position-relative">
-    <i class="fas fa-home"></i> WFH Requests
-    <span th:if="${hasPendingWFHRequests}" 
-          class="badge badge-warning position-absolute top-0 start-100 translate-middle">
-        <i class="fas fa-bell"></i>
-    </span>
-	</a>
-</div>
-
-
+        <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}" class="btn btn-danger enhanced-btn mr-2">
+            <i class="fas fa-trash-alt"></i> Delete
+        </a>
+        <a th:href="@{/activityStatus/{id}(id=${employee.id})}" class="btn btn-success enhanced-btn mr-2">
+            <i class="fas fa-list"></i> Activity Status
+        </a>
+        <a th:href="@{/leave/view/{id}(id=${employee.id})}" class="btn btn-primary enhanced-btn position-relative mr-2">
+            <i class="fas fa-calendar-alt"></i> Leave Requests
+            <span th:if="${hasPendingLeaveRequests}" 
+                  class="badge badge-danger position-absolute top-0 start-100 translate-middle">
+                <i class="fas fa-exclamation-circle"></i>
+            </span>
+        </a>
+        <a th:href="@{/wfh/view/{id}(id=${employee.id})}" class="btn btn-info enhanced-btn position-relative">
+            <i class="fas fa-home"></i> WFH Requests
+            <span th:if="${hasPendingWFHRequests}" 
+                  class="badge badge-warning position-absolute top-0 start-100 translate-middle">
+                <i class="fas fa-bell"></i>
+            </span>
+        </a>
+    </div>
 
     <!-- Update Form Section -->
     <form action="#" th:action="@{/saveEmployee}" th:object="${employee}" method="POST">
@@ -320,17 +260,14 @@ h1 {
                     <label for="firstName">First Name:</label>
                     <input type="text" th:field="*{firstName}" class="form-control" placeholder="First Name">
                 </div>
-
                 <div class="form-group">
                     <label for="lastName">Last Name:</label>
                     <input type="text" th:field="*{lastName}" class="form-control" placeholder="Last Name">
                 </div>
-
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="text" th:field="*{email}" class="form-control" placeholder="Email">
                 </div>
-
                 <div class="form-group">
                     <label for="country">Country:</label>
                     <select id="country" name="country" class="form-control" th:field="*{country}">
@@ -345,20 +282,16 @@ h1 {
                         <option value="USA">USA</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="address">Address:</label>
                     <input type="text" th:field="*{address}" class="form-control" placeholder="Address">
                 </div>
-
                 <div class="form-group">
                     <label for="phoneNumber">Phone Number:</label>
                     <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="Phone Number">
                 </div>
-
                 <div class="review-section">
                     <h2 class="text-center">Review and Rating</h2>
-
                     <div class="form-group">
                         <label for="rating">Rating:</label>
                         <select th:field="*{rating}" class="form-control">
@@ -370,7 +303,6 @@ h1 {
                             <option value="5" th:text="'5'"></option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="review">Review:</label>
                         <textarea th:field="*{review}" rows="4" class="form-control" placeholder="Write your review here..."></textarea>
@@ -381,6 +313,5 @@ h1 {
         </div>
     </form>
 </div>
-
 </body>
 </html>
