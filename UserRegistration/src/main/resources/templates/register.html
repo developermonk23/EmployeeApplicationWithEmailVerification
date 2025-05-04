@@ -4,146 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
-    <link rel="stylesheet" th:href="@{../css/styles.css}">
+    <!-- Modern Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
     <style>
-        /* General reset and body styling */
-        body {
-            font-family: Arial, sans-serif;
+        :root {
+            --primary: #6366f1;
+            --secondary: #06b6d4;
+            --accent: #f472b6;
+            --background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+            --glass-bg: rgba(255,255,255,0.18);
+            --glass-border: rgba(255,255,255,0.4);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+        }
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-            background: url('https://images.pexels.com/photos/2768398/pexels-photo-2768398.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center fixed;
-    		background-size: cover;
+        }
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            font-family: 'Inter', Arial, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .center-wrapper {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Header styling */
-        .header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 20px 15px;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            justify-content: center;
+            z-index: 2;
+            position: relative;
         }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
+        /* Animated floating shapes */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(8px);
+            opacity: 0.5;
+            z-index: 0;
+            animation: float 12s ease-in-out infinite alternate;
         }
-
-        /* Language selector styling */
-        .language-selector {
-            display: inline-block;
+        .shape1 { width: 220px; height: 220px; background: var(--primary); top: 5%; left: 5%; animation-delay: 0s;}
+        .shape2 { width: 160px; height: 160px; background: var(--secondary); top: 70%; left: 80%; animation-delay: 2s;}
+        .shape3 { width: 120px; height: 120px; background: var(--accent); top: 60%; left: 10%; animation-delay: 4s;}
+        @keyframes float {
+            0% { transform: translateY(0) scale(1);}
+            100% { transform: translateY(-40px) scale(1.1);}
         }
-
-        .language-selector select {
-            background-color: #fff;
-            color: #007bff;
-            border: 1px solid #0056b3;
-            border-radius: 5px;
-            padding: 8px 12px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        /* Header */
+        .header {
+            width: 100%;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 32px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-sizing: border-box;
         }
-
-        .language-selector select:hover {
-            background-color: #0056b3;
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header .logo-circle {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #fff;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.18);
         }
-
-        /* Main container styling */
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22223b;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+        .language-selector {
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .language-selector select {
+            background: #fff;
+            color: var(--primary);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+            transition: box-shadow 0.3s, transform 0.3s;
+            max-width: 140px;
+        }
+        .language-selector select:hover {
+            box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+            transform: scale(1.05);
+        }
+        /* Glassmorphism Registration Card */
         .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: var(--glass-bg);
+            border: 1.5px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            padding: 48px 36px 36px 36px;
             max-width: 400px;
-            margin: 50px auto;
+            width: 100%;
+            margin-top: 100px;
+            backdrop-filter: blur(16px);
+            animation: fadeIn 1s cubic-bezier(.4,0,.2,1);
+            box-sizing: border-box;
             text-align: center;
-            animation: fadeIn 1s ease-in-out;
         }
-
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px);}
+            to { opacity: 1; transform: translateY(0);}
         }
-
         h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #007bff;
+            text-align: center;
+            margin-bottom: 28px;
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             text-align: left;
         }
-
         label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: inline-block;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #22223b;
+            margin-bottom: 6px;
+            display: block;
         }
-
         input[type="text"],
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+            padding: 14px 18px;
+            border: 1.5px solid #e0e7ff;
+            border-radius: 14px;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.7);
+            margin-top: 6px;
+            transition: border 0.3s, box-shadow 0.3s;
+            outline: none;
             box-sizing: border-box;
-            font-size: 16px;
-            transition: all 0.3s ease;
         }
-
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="password"]:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px #6366f133;
         }
-
         input[type="submit"] {
-            background-color: #007bff;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: #fff;
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease, transform 0.2s;
             width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+            transition: background 0.3s, transform 0.2s;
         }
-
         input[type="submit"]:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: translateY(-2px) scale(1.02);
         }
-
-        input[type="submit"]:active {
-            transform: translateY(0);
-        }
-
-        /* Message styling */
         .message {
-            color: #dc3545;
-            font-size: 14px;
-            margin-bottom: 20px;
+            color: #ef4444;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: 600;
         }
-
         .alert {
             background-color: #f8d7da;
             color: #721c24;
@@ -151,41 +208,64 @@
             border-radius: 8px;
             margin-bottom: 20px;
         }
-
         .error-icon img {
             width: 20px;
             height: 20px;
             vertical-align: middle;
             margin-right: 5px;
         }
-
-        /* Button link styling */
         .btn-primary {
             display: inline-block;
-            background-color: #007bff;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 0;
+            border-radius: 14px;
             text-decoration: none;
-            font-size: 16px;
-            margin-top: 15px;
-            transition: background-color 0.3s ease, transform 0.2s;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 24px;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(244,114,182,0.10);
+            transition: background 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
         }
-
         .btn-primary:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transform: translateY(-2px) scale(1.02);
         }
-
         .btn-primary:active {
             transform: translateY(0);
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 28px 4vw 24px 4vw;
+                margin-top: 80px;
+            }
+            .header {
+                padding: 12px 6px;
+            }
+            .language-selector select {
+                font-size: 0.9rem;
+                padding: 6px 10px;
+                max-width: 90px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header with Language Selector -->
+    <!-- Animated background shapes -->
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+
+    <!-- Header with Logo and Language Selector -->
     <div class="header">
-        <h1 th:text="#{registration.title}">Registration Page</h1>
+        <div class="logo">
+            <div class="logo-circle">C</div>
+            <h1 th:text="#{registration.title}">Registration Page</h1>
+        </div>
         <div class="language-selector">
             <form th:action="@{/change-language}" method="get">
                 <select name="lang" onchange="this.form.submit()">
@@ -197,32 +277,32 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="message" th:if="${message != null}">
-            <span class="error-icon">
-                <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon">
-            </span>
-            [[${message}]]
+    <div class="center-wrapper">
+        <div class="container">
+            <div class="message" th:if="${message != null}">
+                <span class="error-icon">
+                    <img src="https://img.icons8.com/cute-clipart/64/000000/error.png" alt="Error Icon">
+                </span>
+                [[${message}]]
+            </div>
+            <h2 th:text="#{registration.titlee}">Registration Form</h2>
+            <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
+                <div class="form-group">
+                    <label for="fullname" th:text="#{registration.fullname}">Fullname:</label>
+                    <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email" th:text="#{registration.email}">Email:</label>
+                    <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" th:text="#{registration.password}">Password:</label>
+                    <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <input type="submit" value="Register" th:value="#{registration.button}">
+            </form>
+            <a class="btn-primary" th:href="@{/login}" th:text="#{registration.loginHere}">Login Here</a>
         </div>
-        <h2 th:text="#{registration.titlee}">Registration Form</h2>
-        <form th:action="@{/registration}" method="post" role="form" th:object="${user}">
-            <div class="form-group">
-                <label for="fullname" th:text="#{registration.fullname}">Fullname:</label>
-                <input th:field="*{fullname}" type="text" id="fullname" name="fullname" placeholder="Enter your fullname" required>
-            </div>
-
-            <div class="form-group">
-                <label for="email" th:text="#{registration.email}">Email:</label>
-                <input th:field="*{email}" type="email" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password" th:text="#{registration.password}">Password:</label>
-                <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-            <input type="submit" value="Register" th:value="#{registration.button}">
-        </form>
-        <a class="btn-primary" th:href="@{/login}" th:text="#{registration.loginHere}">Login Here</a>
     </div>
 </body>
 </html>
