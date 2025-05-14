@@ -567,7 +567,7 @@ public class UserController {
 
 
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
         return "redirect:/products";
