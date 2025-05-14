@@ -1,5 +1,8 @@
 package com.devmonk.UserRegistration.service;
 
+import java.util.List;
+
+import com.devmonk.UserRegistration.model.Product;
 import com.devmonk.UserRegistration.model.User;
 
 public interface UserService {
@@ -19,5 +22,9 @@ public interface UserService {
 	User findByResetToken(String token);
 
 	void sendTwoFactorCode(String toEmail, String twoFactorCode);
+
+	void saveProduct(Product product);
+
+	List<Product> getAllProducts();
 
 }

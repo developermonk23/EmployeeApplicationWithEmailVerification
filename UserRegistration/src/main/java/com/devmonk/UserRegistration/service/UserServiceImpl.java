@@ -1,5 +1,6 @@
 package com.devmonk.UserRegistration.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
+import com.devmonk.UserRegistration.model.Product;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
 import com.devmonk.UserRegistration.repository.LeaveBalanceRepository;
+import com.devmonk.UserRegistration.repository.ProductRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 
 import jakarta.mail.internet.MimeMessage;
@@ -36,6 +39,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private LeaveBalanceRepository leaveBalanceRepository;
+	
+	@Autowired
+	private ProductRepository productRepository;
 	
 
 	@Override
@@ -174,5 +180,15 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByResetToken(token);
 		return user;
 	}
+	
+	@Override
+	public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+	
+	@Override
+    public void saveProduct(Product product) {
+        productRepository.save(product);
+    }
  
 }

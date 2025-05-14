@@ -1,5 +1,6 @@
 package com.devmonk.UserRegistration.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -28,12 +30,16 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.devmonk.UserRegistration.model.ActivityLog;
+import com.devmonk.UserRegistration.model.CartItem;
 import com.devmonk.UserRegistration.model.Employee;
 import com.devmonk.UserRegistration.model.LeaveBalance;
 import com.devmonk.UserRegistration.model.LeaveRequest;
+import com.devmonk.UserRegistration.model.Product;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.model.WorkFromHomeRequest;
+import com.devmonk.UserRegistration.repository.CartItemRepository;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
+import com.devmonk.UserRegistration.repository.ProductRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
@@ -48,7 +54,7 @@ public class UserController {
 	@Autowired
 	UserDetailsService userDetailsService;
 	
-	@Autowired 
+	@Autowired
 	private UserService userService;
 	 
 	@Autowired
@@ -63,7 +69,17 @@ public class UserController {
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
 	 
+	 @Autowired
+	 private CartItemRepository cartItemRepository;
+	 
+	 @Autowired
+	 private ProductRepository productRepository;
+	 
 	 private final LocaleResolver localeResolver;
+	 
+	 @Value("${product.images.path}")
+	 private String imageUploadPath;
+
 	 
 	public UserController(UserService userService, EmployeeService employeeService, UserDetailsService userDetailsService,
 			LocaleResolver localeResolver) {
@@ -147,9 +163,10 @@ public class UserController {
     public String userPage(@PathVariable("id") Long employeeId, Model model, Principal principal, HttpSession session) {
         // Check if 2FA is completed
         Boolean twoFactorAuthenticated = (Boolean) session.getAttribute("twoFactorAuthenticated");
-        if (twoFactorAuthenticated == null || !twoFactorAuthenticated) {
-            return "redirect:/2fa"; // Redirect to 2FA if not authenticated
-        }
+		/*
+		 * if (twoFactorAuthenticated == null || !twoFactorAuthenticated) { return
+		 * "redirect:/2fa"; // Redirect to 2FA if not authenticated }
+		 */
 
         // After 2FA is successful, proceed to fetch user info
         String username = principal.getName();
@@ -484,6 +501,78 @@ public class UserController {
             model.addAttribute("errorMessage", "Failed to upload profile picture. Please try again.");
         }
         return "redirect:/user/" + id;
+    }
+    
+    @GetMapping("/products")
+    public String listProducts(Model model) {
+        model.addAttribute("products", productRepository.findAll());
+        return "product_list";
+    }
+
+    @GetMapping("/add")
+    public String showAddProductPage(Model model) {
+        model.addAttribute("product", new Product());
+        List<Product> productList = userService.getAllProducts();
+        model.addAttribute("products", productList);
+        return "add_product";
+    }
+
+    @PostMapping("/addProduct")
+    public String saveProduct(String name, String description, MultipartFile image, Double price) throws IOException {
+        // Ensure directory exists
+        String uploadDir = imageUploadPath; // Inject this from application.properties
+        File uploadDirFile = new File(uploadDir);
+        if (!uploadDirFile.exists()) {
+            uploadDirFile.mkdirs();
+        }
+
+        // Save image
+        String fileName = image.getOriginalFilename();
+        String filePath = uploadDir + fileName;
+        File dest = new File(filePath);
+        image.transferTo(dest);
+
+        // Save product in DB
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setImageUrl("/images/" + fileName); // URL for accessing the image
+        product.setPrice(price);
+
+        productRepository.save(product);
+        return "redirect:/products";
+    }
+
+
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
+        return "redirect:/products";
+    }
+    
+    @GetMapping("/cart")
+    public String viewCart(Model model, Principal principal) {
+        String username = principal.getName();
+        model.addAttribute("cartItems", cartItemRepository.findByUsername(username));
+        return "cart";
+    }
+
+    @GetMapping("/add/{productId}")
+    public String addToCart(@PathVariable Long productId, Principal principal) {
+        String username = principal.getName();
+        Product product = productRepository.findById(productId).orElseThrow();
+        CartItem item = new CartItem();
+        item.setProduct(product);
+        item.setQuantity(1);
+        item.setUsername(username);
+        cartItemRepository.save(item);
+        return "redirect:/cart";
+    }
+
+    @GetMapping("/remove/{id}")
+    public String removeFromCart(@PathVariable Long id) {
+        cartItemRepository.deleteById(id);
+        return "redirect:/cart";
     }
 
 }
