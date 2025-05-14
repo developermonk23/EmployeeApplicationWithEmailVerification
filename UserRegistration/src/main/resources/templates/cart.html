@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Your Cart</title>
+<link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
+    color: #22223b;
+}
+h1 {
+    text-align: center;
+    color: #6366f1;
+    margin-bottom: 30px;
+}
+.cart-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.cart-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+}
+.cart-table th, .cart-table td {
+    padding: 15px;
+    text-align: center;
+}
+.cart-table th {
+    background-color: #6366f1;
+    color: #fff;
+}
+.cart-table td {
+    background-color: #f8f8f8;
+}
+.cart-table img {
+    max-width: 100px;
+    height: auto;
+}
+.total-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #06b6d4;
+    margin-top: 20px;
+    text-align: center;
+}
+.checkout-btn {
+    display: block;
+    text-align: center;
+    background: linear-gradient(90deg, #6366f1, #06b6d4);
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: 30px;
+}
+.checkout-btn:hover {
+    background: linear-gradient(90deg, #06b6d4, #6366f1);
+}
+</style>
+</head>
+<body>
+
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    <div th:if="${cart.products.isEmpty()}">
+        <p>Your cart is empty. Start adding products!</p>
+    </div>
+    <div th:if="${not cart.products.isEmpty()}">
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cart.products}">
+                    <td><img th:src="@{'/uploads/products/' + ${item.product.image}}" alt="Product"></td>
+                    <td th:text="${item.product.name}">Product Name</td>
+                    <td>₹<span th:text="${item.product.price}">0</span></td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td>₹<span th:text="${item.product.price * item.quantity}">0</span></td>
+                    <td>
+                        <a href="#" th:href="@{'/cart/remove/' + ${item.product.id}}" class="btn">Remove</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="total-price">
+            Total: ₹<span th:text="${cart.totalPrice}">0</span>
+        </div>
+        <a href="#" th:href="@{/checkout}" class="checkout-btn">Proceed to Checkout</a>
+    </div>
+</div>
+
+</body>
+</html>

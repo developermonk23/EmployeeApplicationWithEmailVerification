@@ -143,10 +143,15 @@
 
     <!-- Export button -->
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-export" th:href="@{/excel}">
-            <i class="fas fa-file-excel mr-2"></i> Export User Details
-        </a>
-    </div>
+    <a class="btn btn-export" th:href="@{/excel}">
+        <i class="fas fa-file-excel mr-2"></i> Export User Details
+    </a>
+    <!-- Manage Products Button -->
+    <a class="btn btn-primary btn-sm ml-3" th:href="@{/products}">
+        <i class="fas fa-cogs mr-2"></i> Manage Products
+    </a>
+</div>
+
 
     <!-- Employees table -->
     <div class="table-responsive">
