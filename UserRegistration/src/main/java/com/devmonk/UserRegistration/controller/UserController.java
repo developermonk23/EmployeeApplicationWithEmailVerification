@@ -542,6 +542,29 @@ public class UserController {
         productRepository.save(product);
         return "redirect:/products";
     }
+    
+    @PostMapping("/editProduct/{id}")
+    public String updateProduct(@PathVariable("id") Long id, 
+                                @ModelAttribute("product") Product product, 
+                                RedirectAttributes redirectAttributes) throws Exception {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        if (optionalProduct.isPresent()) {
+            Product existingProduct = optionalProduct.get();
+            existingProduct.setName(product.getName());
+            existingProduct.setDescription(product.getDescription());
+            existingProduct.setPrice(product.getPrice());
+            
+            productRepository.save(existingProduct);
+            
+            redirectAttributes.addFlashAttribute("successMessage", "Product details updated successfully.");
+        } else {
+            throw new Exception("Product not found!");
+        }
+
+        return "redirect:/products";
+    }
+
 
 
     @GetMapping("/delete/{id}")
