@@ -5,129 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Management</title>
     <link href="https://fonts.googleapis.com/css?family=Inter:400,600,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 100%);
-            font-family: 'Inter', Arial, sans-serif;
-            color: #22223b;
+            background-color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
         }
+
         .container {
+            max-width: 1300px;
             margin-top: 50px;
-            background: rgba(255,255,255,0.18);
-            border: 1.5px solid rgba(255,255,255,0.4);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-            padding: 30px;
-            backdrop-filter: blur(16px);
         }
+
         h1 {
-            color: #6366f1;
-            margin-bottom: 20px;
             font-weight: 700;
-            letter-spacing: 1px;
+            color: #1e3a8a;
+            text-align: center;
+            margin-bottom: 40px;
         }
-        .btn-primary, .btn-export, .btn-danger {
-            border: none;
-            font-weight: 600;
-            border-radius: 14px;
-            box-shadow: 0 2px 8px rgba(99,102,241,0.12);
-            transition: background 0.3s, transform 0.2s;
-        }
+
         .btn-primary {
-            background: linear-gradient(90deg, #6366f1, #06b6d4);
-            color: #fff;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
+
         .btn-primary:hover {
-            background: linear-gradient(90deg, #06b6d4, #6366f1);
-            transform: translateY(-2px) scale(1.02);
+            background: linear-gradient(90deg, #06b6d4, #4f46e5);
+            transform: translateY(-2px);
         }
-        .btn-danger, .logout-button {
-            background: linear-gradient(90deg, #dc3545, #f472b6);
-            color: #fff;
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
         }
-        .btn-danger:hover, .logout-button:hover {
-            background: linear-gradient(90deg, #f472b6, #dc3545);
-            transform: translateY(-2px) scale(1.02);
-        }
-        .card {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
+
+        .product-card {
             background: #fff;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .card img {
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .product-card img {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
         }
-        .card-body {
-            padding: 15px;
+
+        .product-card-body {
+            padding: 16px;
         }
-        .card-title {
-            font-size: 1.2rem;
+
+        .product-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            color: #333;
+            color: #111827;
+            margin-bottom: 8px;
         }
-        .card-text {
-            font-size: 1rem;
-            color: #666;
+
+        .product-description {
+            font-size: 0.95rem;
+            color: #6b7280;
+            margin-bottom: 12px;
         }
-        .card-footer {
+
+        .product-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .product-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 14px;
         }
-        .card-footer .btn {
-            font-size: 0.9rem;
+
+        .btn-action {
+            border-radius: 8px;
+            font-size: 0.85rem;
+            padding: 6px 12px;
         }
-        .card:hover {
-            transform: translateY(-10px);
-        }
+
         .pagination {
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-back {
+            background: linear-gradient(90deg, #ef4444, #f97316);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(90deg, #f97316, #ef4444);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1 class="text-center">Manage Products</h1>
+    <h1>Manage Products</h1>
 
-    <!-- Add Product Button -->
-    <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-primary btn-sm" th:href="@{/add}">
-            <i class="fas fa-plus mr-2"></i> Add New Product
+    <div class="d-flex justify-content-end mb-4">
+        <a class="btn btn-primary" th:href="@{/add}">
+            <i class="fas fa-plus me-2"></i> Add New Product
         </a>
     </div>
 
-    <!-- Product Cards -->
-    <div class="row">
-        <!-- Example Product Card (dynamically populated from database) -->
-        <div class="col-md-4" th:each="product : ${products}">
-            <div class="card">
-                <img th:src="@{${product.imageUrl}}" alt="Product Image">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${product.name}"></h5>
-                    <p class="card-text" th:text="${product.description}"></p>
-                </div>
-                <div class="card-footer">
-                    <span th:text="${product.price}"></span>
+    <div class="product-grid">
+        <div class="product-card" th:each="product : ${products}">
+            <img th:src="@{${product.imageUrl}}" alt="Product Image">
+            <div class="product-card-body">
+                <h5 class="product-title" th:text="${product.name}"></h5>
+                <p class="product-description" th:text="${product.description}"></p>
+                <div class="product-actions">
+                    <span class="product-price">₹ <span th:text="${product.price}"></span></span>
                     <div>
-                        <!-- Edit Product Button -->
-                        <a class="btn btn-warning btn-sm mr-2" th:href="@{/editProduct/{id}(id=${product.id})}">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                        <!-- Delete Product Button -->
+                        <button 
+						  type="button" 
+						  class="btn btn-warning btn-action me-2" 
+						  data-bs-toggle="modal" 
+						  data-bs-target="#editProductModal"
+						  th:attr="data-id=${product.id}, 
+						           data-name=${product.name}, 
+						           data-description=${product.description}, 
+						           data-price=${product.price}">
+						  <i class="fas fa-edit"></i>
+						</button>
+
                         <form th:action="@{/deleteProduct/{id}(id=${product.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Delete
+                            <button type="submit" class="btn btn-danger btn-action">
+                                <i class="fas fa-trash"></i>
                             </button>
                         </form>
                     </div>
@@ -138,11 +167,10 @@
 
     <!-- Pagination -->
     <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination">
             <li class="page-item">
                 <a class="page-link"
-                   th:href="@{'/productPage/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                   th:text="1"></a>
+                   th:href="@{'/productPage/1' + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">1</a>
             </li>
             <li class="page-item" th:each="i: ${#numbers.sequence(2, totalPages)}">
                 <a class="page-link"
@@ -150,19 +178,75 @@
                    th:classappend="${currentPage == i} ? 'active' : ''"
                    th:text="${i}"></a>
             </li>
-            <li class="page-item">
-                <a class="page-link"
-                   th:href="@{'/productPage/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                   th:if="${currentPage < totalPages}">Next</a>
-            </li>
         </ul>
     </nav>
 
-    <!-- Logout Button -->
-    <a class="btn btn-danger logout-button" th:href="@{/logout}">
-        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-    </a>
+    <!-- Back Button -->
+    <div class="d-flex justify-content-start mt-4">
+        <a class="btn btn-back" href="javascript:history.back()">
+            <i class="fas fa-arrow-left me-2"></i> Back
+        </a>
+    </div>
 </div>
+<!-- Edit Product Modal -->
+<div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editProductForm" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editProductId" name="id">
+          <div class="mb-3">
+            <label for="editProductName" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="editProductName" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="editProductDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="editProductDescription" name="description" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editProductPrice" class="form-label">Price (₹)</label>
+            <input type="number" class="form-control" id="editProductPrice" name="price" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  	const editProductModal = document.getElementById('editProductModal');
+  	editProductModal.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget;
+
+    // Extract data from button attributes
+    const id = button.getAttribute('data-id');
+    const name = button.getAttribute('data-name');
+    const description = button.getAttribute('data-description');
+    const price = button.getAttribute('data-price');
+
+    // Update modal fields
+    document.getElementById('editProductId').value = id;
+    document.getElementById('editProductName').value = name;
+    document.getElementById('editProductDescription').value = description;
+    document.getElementById('editProductPrice').value = price;
+
+    // Set form action
+    const form = document.getElementById('editProductForm');
+    form.action = `/editProduct/${id}`;
+  });
+</script>
+	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	
 
 </body>
 </html>
