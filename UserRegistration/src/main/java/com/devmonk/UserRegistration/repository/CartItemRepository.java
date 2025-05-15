@@ -8,6 +8,5 @@ import com.devmonk.UserRegistration.model.CartItem;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 	
-    List<CartItem> findByUsername(String username);
 }
 

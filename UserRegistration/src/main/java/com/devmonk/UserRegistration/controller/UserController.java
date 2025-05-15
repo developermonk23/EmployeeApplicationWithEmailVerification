@@ -3,8 +3,10 @@ package com.devmonk.UserRegistration.controller;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -43,6 +45,8 @@ import com.devmonk.UserRegistration.repository.ProductRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -580,28 +584,65 @@ public class UserController {
     }
     
     @GetMapping("/cart")
-    public String viewCart(Model model, Principal principal) {
-        String username = principal.getName();
-        model.addAttribute("cartItems", cartItemRepository.findByUsername(username));
+    public String viewCart(HttpSession session, Model model) {
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+        model.addAttribute("cartItems", cart);
+
+        double total = cart.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        model.addAttribute("totalPrice", total);
+
         return "cart";
     }
 
-    @GetMapping("/add/{productId}")
-    public String addToCart(@PathVariable Long productId, Principal principal) {
-        String username = principal.getName();
-        Product product = productRepository.findById(productId).orElseThrow();
-        CartItem item = new CartItem();
-        item.setProduct(product);
-        item.setQuantity(1);
-        item.setUsername(username);
-        cartItemRepository.save(item);
-        return "redirect:/cart";
+    @PostMapping("/addToCart")
+    public String addToCart(@RequestParam("productId") Long productId,
+                            @RequestParam("quantity") int quantity,
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes) {
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+
+        Product product = userService.findById(productId);
+        if (product == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product not found.");
+            return "redirect:/productPage/1"; // Or wherever you want to redirect
+        }
+
+        Optional<CartItem> existing = cart.stream()
+                .filter(item -> item.getProductId().equals(productId))
+                .findFirst();
+
+        if (existing.isPresent()) {
+            existing.get().setQuantity(existing.get().getQuantity() + quantity);
+        } else {
+            CartItem newItem = new CartItem();
+            newItem.setProductId(productId);
+            newItem.setName(product.getName());
+            newItem.setPrice(product.getPrice());
+            newItem.setQuantity(quantity);
+            newItem.setImageUrl(product.getImageUrl());
+            cart.add(newItem);
+        }
+        session.setAttribute("cart", cart);
+
+        return "redirect:/productPage/1"; // Redirect back to the product list page
     }
 
-    @GetMapping("/remove/{id}")
-    public String removeFromCart(@PathVariable Long id) {
-        cartItemRepository.deleteById(id);
-        return "redirect:/cart";
-    }
 
+	/*
+	 * @GetMapping("/add/{productId}") public String addToCart(@PathVariable Long
+	 * productId, Principal principal) { String username = principal.getName();
+	 * Product product = productRepository.findById(productId).orElseThrow();
+	 * CartItem item = new CartItem(); item.setProduct(product);
+	 * item.setQuantity(1); item.setUsername(username);
+	 * cartItemRepository.save(item); return "redirect:/cart"; }
+	 * 
+	 * @GetMapping("/remove/{id}") public String removeFromCart(@PathVariable Long
+	 * id) { cartItemRepository.deleteById(id); return "redirect:/cart"; }
+	 */
 }
