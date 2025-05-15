@@ -508,6 +508,12 @@ public class UserController {
         model.addAttribute("products", productRepository.findAll());
         return "product_list";
     }
+    
+    @GetMapping("/productsUser")
+    public String listProductsUser(Model model) {
+        model.addAttribute("products", productRepository.findAll());
+        return "product_list_user";
+    }
 
     @GetMapping("/add")
     public String showAddProductPage(Model model) {
