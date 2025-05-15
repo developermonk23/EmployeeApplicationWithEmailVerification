@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -14,6 +14,9 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,14 +42,11 @@ import com.devmonk.UserRegistration.model.LeaveRequest;
 import com.devmonk.UserRegistration.model.Product;
 import com.devmonk.UserRegistration.model.User;
 import com.devmonk.UserRegistration.model.WorkFromHomeRequest;
-import com.devmonk.UserRegistration.repository.CartItemRepository;
 import com.devmonk.UserRegistration.repository.EmployeeRepository;
 import com.devmonk.UserRegistration.repository.ProductRepository;
 import com.devmonk.UserRegistration.repository.UserRepository;
 import com.devmonk.UserRegistration.service.EmployeeService;
 import com.devmonk.UserRegistration.service.UserService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -72,9 +72,6 @@ public class UserController {
 	 
 	 @Autowired
 	 private EmployeeRepository employeeRepository;
-	 
-	 @Autowired
-	 private CartItemRepository cartItemRepository;
 	 
 	 @Autowired
 	 private ProductRepository productRepository;
@@ -589,50 +586,123 @@ public class UserController {
         if (cart == null) {
             cart = new ArrayList<>();
         }
-        model.addAttribute("cartItems", cart);
 
-        double total = cart.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        double total = cart.stream()
+            .mapToDouble(item -> item.getPrice() * item.getQuantity())
+            .sum();
+
+        model.addAttribute("cartItems", cart);
         model.addAttribute("totalPrice", total);
 
-        return "cart";
+        return "cart"; // cart.html Thymeleaf view
     }
+    
+	/*
+	 * @GetMapping("/api/cart")
+	 * 
+	 * @ResponseBody public List<CartItem> getCartItems(HttpSession session) {
+	 * List<CartItem> cart = (List<CartItem>) session.getAttribute("cart"); if (cart
+	 * == null) { cart = new ArrayList<>(); } return cart; }
+	 */
 
-    @PostMapping("/addToCart")
-    public String addToCart(@RequestParam("productId") Long productId,
-                            @RequestParam("quantity") int quantity,
-                            HttpSession session,
-                            RedirectAttributes redirectAttributes) {
-        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new ArrayList<>();
-        }
 
-        Product product = userService.findById(productId);
-        if (product == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Product not found.");
-            return "redirect:/productPage/1"; // Or wherever you want to redirect
-        }
+	/*
+	 * @PostMapping("/addToCart") public String addToCart(@RequestParam Long
+	 * productId,
+	 * 
+	 * @RequestParam int quantity, HttpSession session) { // Fetch product details
+	 * (from DB or service) Product product = userService.getProductById(productId);
+	 * 
+	 * if (product == null) { return "redirect:/productPage"; // or show error }
+	 * 
+	 * // Retrieve cart from session or create new one List<CartItem> cart =
+	 * (List<CartItem>) session.getAttribute("cart"); if (cart == null) { cart = new
+	 * ArrayList<>(); }
+	 * 
+	 * // Check if product already in cart boolean itemExists = false; for (CartItem
+	 * item : cart) { if (item.getProductId().equals(productId)) {
+	 * item.setQuantity(item.getQuantity() + quantity); itemExists = true; break; }
+	 * }
+	 * 
+	 * // If not exists, add new CartItem if (!itemExists) { CartItem newItem = new
+	 * CartItem(); newItem.setProductId(product.getId());
+	 * newItem.setName(product.getName());
+	 * newItem.setImageUrl(product.getImageUrl());
+	 * newItem.setPrice(product.getPrice()); newItem.setQuantity(quantity);
+	 * cart.add(newItem); }
+	 * 
+	 * // Update session attribute session.setAttribute("cart", cart);
+	 * 
+	 * // Redirect back to product catalog return "redirect:/productPage"; }
+	 */
+    
+	/*
+	 * @PostMapping("/api/addToCart")
+	 * 
+	 * @ResponseBody public List<CartItem> addToCartAjax(@RequestParam Long
+	 * productId,
+	 * 
+	 * @RequestParam int quantity, HttpSession session) { Product product =
+	 * userService.getProductById(productId); if (product == null) { return
+	 * Collections.emptyList(); }
+	 * 
+	 * List<CartItem> cart = (List<CartItem>) session.getAttribute("cart"); if (cart
+	 * == null) { cart = new ArrayList<>(); }
+	 * 
+	 * boolean itemExists = false; for (CartItem item : cart) { if
+	 * (item.getProductId().equals(productId)) { item.setQuantity(item.getQuantity()
+	 * + quantity); itemExists = true; break; } }
+	 * 
+	 * if (!itemExists) { CartItem newItem = new CartItem();
+	 * newItem.setProductId(product.getId()); newItem.setName(product.getName());
+	 * newItem.setImageUrl(product.getImageUrl());
+	 * newItem.setPrice(product.getPrice()); newItem.setQuantity(quantity);
+	 * cart.add(newItem); }
+	 * 
+	 * session.setAttribute("cart", cart);
+	 * 
+	 * return cart; // Return updated cart }
+	 */
 
-        Optional<CartItem> existing = cart.stream()
-                .filter(item -> item.getProductId().equals(productId))
-                .findFirst();
+    
+	/*
+	 * @GetMapping("/productPage") public String showProductPage(Model model) { //
+	 * If needed, add product list or other attributes to model here return
+	 * "product_list_user"; // this should match your Thymeleaf HTML template name }
+	 */
 
-        if (existing.isPresent()) {
-            existing.get().setQuantity(existing.get().getQuantity() + quantity);
-        } else {
-            CartItem newItem = new CartItem();
-            newItem.setProductId(productId);
-            newItem.setName(product.getName());
-            newItem.setPrice(product.getPrice());
-            newItem.setQuantity(quantity);
-            newItem.setImageUrl(product.getImageUrl());
-            cart.add(newItem);
-        }
-        session.setAttribute("cart", cart);
 
-        return "redirect:/productPage/1"; // Redirect back to the product list page
-    }
-
+	/*
+	 * @GetMapping("/productPage/{pageNumber}") public String
+	 * viewProductPage(@PathVariable("pageNumber") int pageNumber,
+	 * 
+	 * @RequestParam(value = "sortField", required = false, defaultValue = "name")
+	 * String sortField,
+	 * 
+	 * @RequestParam(value = "sortDir", required = false, defaultValue = "asc")
+	 * String sortDir, Model model) { int pageSize = 6; // You can adjust the number
+	 * of products per page
+	 * 
+	 * Sort sort = Sort.by(sortField); sort = sortDir.equals("asc") ?
+	 * sort.ascending() : sort.descending();
+	 * 
+	 * Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
+	 * Page<Product> page = userService.findAllProducts(pageable); // Assuming a
+	 * method in your UserService
+	 * 
+	 * List<Product> products = page.getContent(); long totalElements =
+	 * page.getTotalElements(); int totalPages = page.getTotalPages();
+	 * 
+	 * model.addAttribute("products", products); model.addAttribute("currentPage",
+	 * pageNumber); model.addAttribute("totalPages", totalPages);
+	 * model.addAttribute("totalItems", totalElements);
+	 * model.addAttribute("sortField", sortField); model.addAttribute("sortDir",
+	 * sortDir); model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc"
+	 * : "asc");
+	 * 
+	 * return "product_list_user"; // Make sure this matches the name of your HTML
+	 * file }
+	 */
 
 	/*
 	 * @GetMapping("/add/{productId}") public String addToCart(@PathVariable Long
