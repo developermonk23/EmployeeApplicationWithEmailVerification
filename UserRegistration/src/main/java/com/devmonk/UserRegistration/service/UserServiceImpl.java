@@ -1,6 +1,7 @@
 package com.devmonk.UserRegistration.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +190,12 @@ public class UserServiceImpl implements UserService {
 	@Override
     public void saveProduct(Product product) {
         productRepository.save(product);
+    }
+	
+	@Override
+	public Product findById(Long productId) {
+        Optional<Product> productOpt = productRepository.findById(productId);
+        return productOpt.orElse(null);
     }
  
 }

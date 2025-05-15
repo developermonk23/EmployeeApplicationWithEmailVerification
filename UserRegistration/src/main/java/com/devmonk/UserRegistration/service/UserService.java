@@ -27,4 +27,6 @@ public interface UserService {
 
 	List<Product> getAllProducts();
 
+	Product findById(Long productId);
+
 }
