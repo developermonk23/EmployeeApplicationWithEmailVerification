@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -196,6 +198,21 @@ public class UserServiceImpl implements UserService {
 	public Product findById(Long productId) {
         Optional<Product> productOpt = productRepository.findById(productId);
         return productOpt.orElse(null);
+    }
+	
+	@Override
+	public Page<Product> findAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+	
+	@Override
+	public Product getProductById(Long productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            return optionalProduct.get();
+        } else {
+            throw new RuntimeException("Product not found for ID: " + productId);
+        }
     }
  
 }

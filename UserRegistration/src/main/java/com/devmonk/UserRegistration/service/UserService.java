@@ -2,6 +2,9 @@ package com.devmonk.UserRegistration.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.devmonk.UserRegistration.model.Product;
 import com.devmonk.UserRegistration.model.User;
 
@@ -28,5 +31,9 @@ public interface UserService {
 	List<Product> getAllProducts();
 
 	Product findById(Long productId);
+
+	Page<Product> findAllProducts(Pageable pageable);
+
+	Product getProductById(Long productId);
 
 }

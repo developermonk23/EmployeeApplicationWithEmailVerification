@@ -4,73 +4,67 @@
     <title>Your Cart</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <style>
-        body {
-            padding: 20px;
-        }
-        .cart-container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .cart-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            margin-right: 15px;
-        }
-        .cart-item-details {
-            flex-grow: 1;
-        }
-        .cart-item-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-        }
-        .cart-item-price {
-            color: #555;
-        }
-        .cart-item-quantity {
-            font-size: 0.9rem;
-        }
-        .total-section {
-            margin-top: 20px;
-            text-align: right;
-        }
-        .btn-back {
-            margin-top: 20px;
-        }
+        /* your existing CSS here */
     </style>
 </head>
 <body>
 <div class="cart-container">
     <h2>Your Cart</h2>
 
-    <div th:if="${#lists.isEmpty(cartItems)}">
-        <p>Your cart is empty.</p>
-    </div>
+    <div id="cartItemsContainer"></div>
 
-    <div th:each="item : ${cartItems}" class="cart-item">
-        <img th:src="@{${item.imageUrl}}" alt="Product Image">
-        <div class="cart-item-details">
-            <div class="cart-item-name" th:text="${item.name}"></div>
-            <div class="cart-item-price">₹ <span th:text="${item.price}"></span></div>
-            <div class="cart-item-quantity">Quantity: <span th:text="${item.quantity}"></span></div>
-        </div>
-    </div>
-
-    <div class="total-section" th:if="${not #lists.isEmpty(cartItems)}">
-        <h4>Total: ₹ <span th:text="${totalPrice}"></span></h4>
+    <div class="total-section" id="totalSection" style="display:none;">
+        <h4>Total: ₹ <span id="cartTotal"></span></h4>
         <button class="btn btn-success">Proceed to Checkout</button>
     </div>
 
+    <p id="emptyCartMessage">Your cart is empty.</p>
+
     <a href="javascript:history.back()" class="btn btn-secondary btn-back">Continue Shopping</a>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const cartData = sessionStorage.getItem('cart');
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const totalSection = document.getElementById('totalSection');
+    const cartTotalElement = document.getElementById('cartTotal');
+    const emptyCartMessage = document.getElementById('emptyCartMessage');
+
+    if (cartData) {
+        const cartItems = JSON.parse(cartData);
+
+        if (cartItems.length === 0) {
+            emptyCartMessage.style.display = 'block';
+            totalSection.style.display = 'none';
+        } else {
+            emptyCartMessage.style.display = 'none';
+            let total = 0;
+
+            cartItems.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.classList.add('cart-item');
+                itemDiv.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₹ ${item.price.toFixed(2)}</div>
+                        <div class="cart-item-quantity">Quantity: ${item.quantity}</div>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(itemDiv);
+                total += item.price * item.quantity;
+            });
+
+            cartTotalElement.textContent = total.toFixed(2);
+            totalSection.style.display = 'block';
+        }
+    } else {
+        emptyCartMessage.style.display = 'block';
+        totalSection.style.display = 'none';
+    }
+});
+</script>
+
 </body>
 </html>
